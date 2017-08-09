@@ -1,0 +1,36 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+</head>
+<body>
+    <div> 
+        <form action="/Authentication/Register" method="post">
+            学号 : <input type="text" name="StudentName" /><br />
+            班级：<input type="text" name="ClassID" /><br />
+            用户名 : <input type="text" name="StudentID" /><br />
+            密码 : <input type="password" name="Password" /><br />
+            重复密码 : <input type="password" name="Concerned" /><br />
+            性别 : <label><input type="radio" name="Gender" value="1"/>男 </label>
+                     <label><input type="radio" name="Gender" value="0"/>女 </label><br />
+            年级 : 
+            <select>
+                <option value="1">大一</option>
+                <option value="2">大二</option>
+                <option value="3">大三</option>
+                <option value="4">大四</option>
+            </select><br />
+            电话号码 : <input type="text" name="Phonenumber" /><br />
+            邮箱 : <input type="text" name="Email" /><br />
+            <button>注册</button>
+        </form>
+    </div>
+</body>
+</html>

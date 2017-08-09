@@ -1,0 +1,26 @@
+﻿@model competition
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = Model.CompetitionName;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@Model.CompetitionName</title>
+</head>
+<body>
+    <h2>@Model.CompetitionName</h2>
+    <h3> 
+        @Model.Details
+    </h3>
+    <div>
+        This Competition will start at : @Model.StartTime
+    </div>
+    <div>
+        This Competition will end at : @Model.EndTime
+    </div>
+</body>
+</html>

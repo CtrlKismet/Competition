@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="totalmsgdbEntities-Web.config Connection String" description="totalmsgdbEntities 由应用程序在 web.config 中用来访问数据库的连接字符串。" defaultValue="metadata=res://*/DataModel.csdl|res://*/DataModel.ssdl|res://*/DataModel.msl;provider=MySql.Data.MySqlClient;provider connection string=&quot;server=39.108.51.95;user id=root;password=Hyz981029;persistsecurityinfo=True;database=totalmsgdb&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\Program\\Competition\\Competition\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='totalmsgdbEntities']/@connectionString" />
+  </parameter>
+</parameters>

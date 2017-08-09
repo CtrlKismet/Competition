@@ -1,0 +1,59 @@
+﻿@using Competition.ViewModels
+@model ViewCompetition
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = "首页";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <h1>所有比赛</h1>
+    @if(Model.HasPermission)
+    {
+        <a href="/Manage/Add">新建比赛</a>
+    }
+    @if(Model.Competitions.Count!=0)
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>比赛名称</th>
+                    <th>比赛开始日期</th>
+                    <th>报名截止日期</th>
+                    <th>管理</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (competition c in Model.Competitions)
+                {
+                    <tr>
+                        <td><a href="/Home/ViewCompetition?ID=@c.CompetitionID">@c.CompetitionName</a></td>
+                        <td>@c.StartTime.ToString("D")</td>
+                        <td>@c.EndTime.ToString("D")</td>
+                        @if (Model.HasPermission)
+                        {
+                            <td>
+                                <a href="/Manage/Register?ID=@c.CompetitionID">报名</a> |
+                                <a href="/Manage/Edit?ID=@c.CompetitionID">编辑</a> |
+                                <a href="/Manage/Delete?ID=@c.CompetitionID">删除</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a href="/Manage/Register?ID=@c.CompetitionID">报名</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</body>
+</html>

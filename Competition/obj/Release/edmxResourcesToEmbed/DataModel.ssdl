@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="totalmsgdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="competition">
+    <Key>
+      <PropertyRef Name="CompetitionID" />
+    </Key>
+    <Property Name="CompetitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompetitionName" Type="longtext" />
+    <Property Name="Details" Type="longtext" />
+    <Property Name="StartTime" Type="datetime" Precision="0" Nullable="false" />
+    <Property Name="EndTime" Type="datetime" Precision="0" Nullable="false" />
+  </EntityType>
+  <EntityType Name="student">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StudentID" Type="longtext" />
+    <Property Name="HasPermission" Type="tinyint" />
+    <Property Name="ClassID" Type="int" Nullable="false" />
+    <Property Name="Grade" Type="int" Nullable="false" />
+    <Property Name="Gender" Type="int" Nullable="false" />
+    <Property Name="StudentName" Type="longtext" />
+    <Property Name="Password" Type="longtext" />
+    <Property Name="Email" Type="longtext" />
+    <Property Name="Phonenumber" Type="longtext" />
+  </EntityType>
+  <EntityContainer Name="totalmsgdbModelStoreContainer">
+    <EntitySet Name="competition" EntityType="Self.competition" Schema="totalmsgdb" store:Type="Tables" />
+    <EntitySet Name="student" EntityType="Self.student" Schema="totalmsgdb" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

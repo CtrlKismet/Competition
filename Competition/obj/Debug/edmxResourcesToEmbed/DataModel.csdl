@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="totalmsgdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="competition">
+    <Key>
+      <PropertyRef Name="CompetitionID" />
+    </Key>
+    <Property Name="CompetitionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StartTime" Type="DateTime" Nullable="false" />
+    <Property Name="EndTime" Type="DateTime" Nullable="false" />
+    <Property Name="CompetitionName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Details" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="student">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="StudentID" Nullable="false" annotation:StoreGeneratedPattern="None" Type="String" />
+    <Property Name="ClassID" Type="Int32" Nullable="false" />
+    <Property Name="Grade" Type="Int32" Nullable="false" />
+    <Property Name="Gender" Type="Int32" Nullable="false" />
+    <Property Name="StudentName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Phonenumber" Type="String" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HasPermission" Type="SByte" />
+  </EntityType>
+  <EntityContainer Name="totalmsgdbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="competition" EntityType="Self.competition" />
+    <EntitySet Name="student" EntityType="Self.student" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,26 @@
+﻿@model competition
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = Model.CompetitionName + " | 编辑";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UserSettings</title>
+</head>
+<body>
+    <h3>比赛信息 : </h3>
+    <form action="/Manage/Edit" method="post">
+        比赛名称 : <input type="text" name="CompetitionName" value="@Model.CompetitionName" /><br />
+        比赛详情 : <input type="text" name="Details" value="@Model.Details" /><br />
+        比赛开始时间 : <input type="text" name="StartTime" value="@Model.StartTime" /><br />
+        报名截止时间 : <input type="text" name="EndTime" value="@Model.EndTime" /><br />
+        <input type="hidden" name="CompetitionID" value="@Model.CompetitionID" />
+        <button type="submit">确认更改</button>
+    </form>
+</body>
+</html>
