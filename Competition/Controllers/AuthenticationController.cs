@@ -16,6 +16,11 @@ namespace Competition.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 登录 Post
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Login(student s)
         {
@@ -32,17 +37,30 @@ namespace Competition.Controllers
             }
         }
 
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Index","Home");
         }
 
+        /// <summary>
+        /// 注册新用户
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Register()
         {
             return View("Register");
         }
 
+        /// <summary>
+        /// 注册新用户 Post
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Register(student s)
         {

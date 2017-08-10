@@ -10,6 +10,10 @@ namespace Competition.Controllers
 
     public class HomeController : Controller
     {
+        /// <summary>
+        /// 网站首页
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -20,6 +24,10 @@ namespace Competition.Controllers
             return View(c);
         }
 
+        /// <summary>
+        /// 用户设置
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public ActionResult UserSettings()
         {
@@ -29,6 +37,11 @@ namespace Competition.Controllers
             return View(s);
         }
 
+        /// <summary>
+        /// 用户信息修改
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         public ActionResult UserSettings(student s)
@@ -38,6 +51,11 @@ namespace Competition.Controllers
             return View(s);
         }
 
+        /// <summary>
+        /// 查看比赛详情
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         //[Authorize]
         public ActionResult ViewCompetition(int? ID)
         {

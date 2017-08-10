@@ -8,6 +8,11 @@ namespace Competition.ViewModels
 {
     public class MsgBusinessLayer
     {
+        /// <summary>
+        /// 保存学生信息
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public student SaveStudent(student s)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -16,6 +21,11 @@ namespace Competition.ViewModels
             return s;
         }
 
+        /// <summary>
+        /// 更新学生信息
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public bool RefreshStudent(student s)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -36,6 +46,11 @@ namespace Competition.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// 保存比赛
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public competition SaveCompetition(competition c)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -44,6 +59,11 @@ namespace Competition.ViewModels
             return c;
         }
 
+        /// <summary>
+        /// 删除比赛
+        /// </summary>
+        /// <param name="ID">被删除比赛的ID</param>
+        /// <returns></returns>
         public bool DeleteCompetition(int ID)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -54,6 +74,11 @@ namespace Competition.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// 更新比赛信息
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public bool RefreshCompetition(competition c)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
@@ -81,12 +106,30 @@ namespace Competition.ViewModels
             return msgEts.student.FirstOrDefault(m => m.StudentName == s.StudentName && m.Password == s.Password)!=null;
         }
 
+        /// <summary>
+        /// 检验用户权限
+        /// </summary>
+        /// <param name="name">用户的学号（注意name和ID是被交换的）</param>
+        /// <returns></returns>
         public bool IsAdmin(string name)
         {
             if (name == "") return false;
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             student s = msgEts.student.FirstOrDefault(m => m.StudentName == name);
             return s.HasPermission!=0;
+        }
+
+        /// <summary>
+        /// 得到用户的名称
+        /// </summary>
+        /// <param name="name">用户的学号（注意name和ID是被交换的）</param>
+        /// <returns></returns>
+        public string GetUserName(string name)
+        {
+            if (name == "") return "";
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            student s = msgEts.student.FirstOrDefault(m => m.StudentName == name);
+            return s.StudentID;
         }
     }
     
