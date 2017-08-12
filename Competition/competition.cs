@@ -19,5 +19,8 @@ namespace Competition
         public System.DateTime EndTime { get; set; }
         public string CompetitionName { get; set; }
         public string Details { get; set; }
+        public int Groups { get; set; }
+        public int TeamLimit { get; set; }
+        public string Awards { get; set; }
     }
 }

@@ -9,6 +9,9 @@
     <Property Name="EndTime" Type="DateTime" Nullable="false" />
     <Property Name="CompetitionName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
     <Property Name="Details" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Groups" Type="Int32" Nullable="false" />
+    <Property Name="TeamLimit" Type="Int32" Nullable="false" />
+    <Property Name="Awards" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="student">
     <Key>
@@ -24,9 +27,22 @@
     <Property Name="Phonenumber" Type="String" Nullable="false" />
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="HasPermission" Type="SByte" />
+    <Property Name="CertainTeam" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityContainer Name="totalmsgdbEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="competition" EntityType="Self.competition" />
     <EntitySet Name="student" EntityType="Self.student" />
+    <EntitySet Name="team" EntityType="totalmsgdbModel.team" />
   </EntityContainer>
+  <EntityType Name="team">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="CID" Type="Int32" Nullable="false" />
+    <Property Name="Group" Type="Int32" Nullable="false" />
+    <Property Name="Number" Type="Int32" Nullable="false" />
+    <Property Name="Member" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="Award" Type="Int32" Nullable="false" />
+  </EntityType>
 </Schema>

@@ -25,15 +25,28 @@ namespace Competition.Controllers
         }
 
         /// <summary>
+        /// 用户详情
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public ActionResult UserDetails(string ID)
+        {
+            if (ID == null) ID = User.Identity.Name;
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            student s= msgEts.student.FirstOrDefault(m => m.StudentID == ID);
+            return View(s);
+        }
+
+        /// <summary>
         /// 用户设置
         /// </summary>
         /// <returns></returns>
         [Authorize]
         public ActionResult UserSettings()
         {
-            string userName = User.Identity.Name;
+            string ID = User.Identity.Name;
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            student s= msgEts.student.FirstOrDefault(m => m.StudentName == userName);
+            student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
             return View(s);
         }
 
@@ -47,7 +60,7 @@ namespace Competition.Controllers
         public ActionResult UserSettings(student s)
         {
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
-            if (msgBal.RefreshStudent(s)) return RedirectToAction("Index");
+            if (msgBal.RefreshStudent(s)) return RedirectToAction("UserDetails",new { ID = s.StudentID });
             return View(s);
         }
 

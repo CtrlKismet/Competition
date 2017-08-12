@@ -8,8 +8,34 @@ namespace Competition.ViewModels
 {
     public class MsgBusinessLayer
     {
+        #region StudentManagement
+        
         /// <summary>
-        /// 保存学生信息
+        /// 通过学号获得用户
+        /// </summary>
+        /// <param name="ID">用户的学号</param>
+        /// <returns></returns>
+        public student GetStudentByID(string ID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
+            return s;
+        }
+
+        /// <summary>
+        /// 通过学号获得用户的名称
+        /// </summary>
+        /// <param name="ID">用户的学号</param>
+        /// <returns></returns>
+        public string GetUserNameByID(string ID)
+        {
+            if (ID == "") return "";
+            student s = GetStudentByID(ID);
+            return s.StudentName;
+        }
+
+        /// <summary>
+        /// 新建学生信息
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -46,8 +72,24 @@ namespace Competition.ViewModels
             return false;
         }
 
+        #endregion
+
+        #region CompetitionManagement
+        
         /// <summary>
-        /// 保存比赛
+        /// 通过ID获得比赛
+        /// </summary>
+        /// <param name="ID">比赛的ID</param>
+        /// <returns></returns>
+        public competition GetCompetitionByID(int ID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            competition c = msgEts.competition.FirstOrDefault(m => m.CompetitionID == ID);
+            return c;
+        }
+
+        /// <summary>
+        /// 新建比赛
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
@@ -95,6 +137,79 @@ namespace Competition.ViewModels
             return false;
         }
 
+        #endregion
+
+        #region TeamManagement
+        
+        /// <summary>
+        /// 通过编号获取队伍
+        /// </summary>
+        /// <param name="ID">队伍的编号</param>
+        /// <returns></returns>
+        public team GetTeamByID(int ID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            team t = msgEts.team.FirstOrDefault(m => m.ID == ID);
+            return t;
+        }
+
+        /// <summary>
+        /// 新建队伍
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public team SaveSTeam(team t)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            msgEts.team.Add(t);
+            msgEts.SaveChanges();
+            return t;
+        }
+
+        /// <summary>
+        /// 更新队伍信息
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public bool RefreshTeam(student s)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            student s1 = msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID);
+            if (s1 != null)
+            {
+                s1.Phonenumber = s.Phonenumber;
+                s1.Email = s.Email;
+                s1.Gender = s.Gender;
+                s1.Grade = s.Grade;
+                s1.ClassID = s.ClassID;
+                /*
+                 * Other Propertities is not posted to this function
+                */
+                msgEts.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 删除队伍
+        /// </summary>
+        /// <param name="ID">被删除队伍的ID</param>
+        /// <returns></returns>
+        public bool DeleteTeam(int ID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            team t = msgEts.team.FirstOrDefault(m => m.ID == ID);
+            if (t == null) return false;
+            msgEts.team.Remove(t);
+            msgEts.SaveChanges();
+            return true;
+        }
+
+        #endregion
+
+        #region RootManagement
+
         /// <summary>
         ///  检验用户是否能登录
         /// </summary>
@@ -103,34 +218,23 @@ namespace Competition.ViewModels
         public bool IsValidUser(student s)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            return msgEts.student.FirstOrDefault(m => m.StudentName == s.StudentName && m.Password == s.Password)!=null;
+            return msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID && m.Password == s.Password)!=null;
         }
 
         /// <summary>
-        /// 检验用户权限
+        /// 检验用户权限（通过学号）
         /// </summary>
-        /// <param name="name">用户的学号（注意name和ID是被交换的）</param>
+        /// <param name="name">用户的学号</param>
         /// <returns></returns>
-        public bool IsAdmin(string name)
+        public bool IsAdmin(string ID)
         {
-            if (name == "") return false;
+            if (ID == "") return false;
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            student s = msgEts.student.FirstOrDefault(m => m.StudentName == name);
+            student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
             return s.HasPermission!=0;
         }
+        #endregion
 
-        /// <summary>
-        /// 得到用户的名称
-        /// </summary>
-        /// <param name="name">用户的学号（注意name和ID是被交换的）</param>
-        /// <returns></returns>
-        public string GetUserName(string name)
-        {
-            if (name == "") return "";
-            totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            student s = msgEts.student.FirstOrDefault(m => m.StudentName == name);
-            return s.StudentID;
-        }
     }
-    
+
 }

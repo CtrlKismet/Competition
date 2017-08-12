@@ -27,7 +27,7 @@ namespace Competition.Controllers
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
             if (msgBal.IsValidUser(s))
             {
-                FormsAuthentication.SetAuthCookie(s.StudentName, false);
+                FormsAuthentication.SetAuthCookie(s.StudentID, false);
                 return RedirectToAction("Index", "Home");
             }
             else

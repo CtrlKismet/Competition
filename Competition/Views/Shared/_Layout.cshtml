@@ -22,14 +22,14 @@
                 -->
                 @{ 
                     MsgBusinessLayer msgBal = new MsgBusinessLayer();
-                    string userName = msgBal.GetUserName(User.Identity.Name);
+                    string userName = msgBal.GetUserNameByID(User.Identity.Name);
                 }
                 <text class="navbar-brand">Welcome @userName !</text>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("首页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("用户设置", "UserSettings", "Home")</li>
+                    <li>@Html.ActionLink("用户", "UserDetails", "Home",new { ID=User.Identity.Name })</li>
                     @if (User.Identity.Name != "")
                     {
                         <li>@Html.ActionLink("登出", "Logout", "Authentication")</li>
@@ -43,13 +43,14 @@
             </div>
         </div>
     </div>
+    <br />
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-           <p>Created By Ctrlkismet.</p>
-           <p>Currect Time is : @System.DateTime.Now</p>
-        </footer>
+    </div>
+    <div class="modal-footer">
+        <p>Created By Ctrlkismet.  Powered by <a href="http://getbootstrap.com/2.3.2/" target="_blank">bootstrap</a>.</p>
+        <p>Currect Time is : @System.DateTime.Now</p>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

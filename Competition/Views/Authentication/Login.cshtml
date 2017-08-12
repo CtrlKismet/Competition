@@ -177,7 +177,7 @@ website: http://www.dhenriquez.cl
     <div class="titulo">Welcome</div>
     @Html.ValidationMessage("CredentialError", new { Style = "color:red;" })
     <form action="/Authentication/Login" method="post">
-        <input type="text" name="StudentName" required title="Username required" placeholder="学号" data-icon="U">
+        <input type="text" name="StudentID" required title="Username required" placeholder="学号" data-icon="U">
         <input type="password" name="Password" required title="Password required" placeholder="密码" data-icon="x">
         <div class="olvido">
             <div class="col"><a href="/Authentication/Register" title="Register">注册</a></div>

@@ -187,6 +187,9 @@
     <Compile Include="student.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="team.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MsgBusinessLayer.cs" />
     <Compile Include="ViewModels\ViewCompetition.cs" />
   </ItemGroup>
@@ -267,6 +270,9 @@
     <Content Include="Views\Home\ViewCompetition.cshtml" />
     <Content Include="Views\Manage\Add.cshtml" />
     <Content Include="Views\Manage\Edit.cshtml" />
+    <Content Include="Views\Manage\Register.cshtml" />
+    <Content Include="Views\Manage\ErrorRegister.cshtml" />
+    <Content Include="Views\Home\UserDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

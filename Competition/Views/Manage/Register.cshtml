@@ -1,0 +1,27 @@
+﻿@model competition
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = Model.CompetitionName + " | 报名";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+</head>
+<body>
+    <h2>队伍成员：</h2>
+    <form action="/Manage/Register" method="post">
+        <input type="hidden" name="number" value="@Model.CompetitionID" />
+        @for (int i = 1; i <= Model.TeamLimit; i++)
+        {
+            <br /><input type="text" name="member"  placeholder="学号"/><br />
+        }
+        <br /><button type="submit">提交队伍信息</button>
+        <div>注意：第一个人即为队长</div>
+    </form>
+</body>
+</html>

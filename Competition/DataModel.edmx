@@ -11,9 +11,12 @@
           </Key>
           <Property Name="CompetitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CompetitionName" Type="longtext" />
+          <Property Name="Groups" Type="int" Nullable="false" />
+          <Property Name="TeamLimit" Type="int" Nullable="false" />
           <Property Name="Details" Type="longtext" />
           <Property Name="StartTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Awards" Type="longtext" />
         </EntityType>
         <EntityType Name="student">
           <Key>
@@ -29,10 +32,23 @@
           <Property Name="Password" Type="longtext" />
           <Property Name="Email" Type="longtext" />
           <Property Name="Phonenumber" Type="longtext" />
+          <Property Name="CertainTeam" Type="longtext" />
+        </EntityType>
+        <EntityType Name="team">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CID" Type="int" Nullable="false" />
+          <Property Name="Group" Type="int" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="Member" Type="longtext" />
+          <Property Name="Award" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="totalmsgdbModelStoreContainer">
           <EntitySet Name="competition" EntityType="Self.competition" Schema="totalmsgdb" store:Type="Tables" />
           <EntitySet Name="student" EntityType="Self.student" Schema="totalmsgdb" store:Type="Tables" />
+          <EntitySet Name="team" EntityType="Self.team" Schema="totalmsgdb" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -47,6 +63,9 @@
           <Property Name="EndTime" Type="DateTime" Nullable="false" />
           <Property Name="CompetitionName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
           <Property Name="Details" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="Groups" Type="Int32" Nullable="false" />
+          <Property Name="TeamLimit" Type="Int32" Nullable="false" />
+          <Property Name="Awards" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="student">
           <Key>
@@ -62,11 +81,24 @@
           <Property Name="Phonenumber" Type="String" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HasPermission" Type="SByte" />
+          <Property Name="CertainTeam" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="totalmsgdbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="competition" EntityType="Self.competition" />
           <EntitySet Name="student" EntityType="Self.student" />
+          <EntitySet Name="team" EntityType="totalmsgdbModel.team" />
         </EntityContainer>
+        <EntityType Name="team">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CID" Type="Int32" Nullable="false" />
+          <Property Name="Group" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Member" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="Award" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -76,6 +108,9 @@
           <EntitySetMapping Name="competition">
             <EntityTypeMapping TypeName="totalmsgdbModel.competition">
               <MappingFragment StoreEntitySet="competition">
+                <ScalarProperty Name="Awards" ColumnName="Awards" />
+                <ScalarProperty Name="TeamLimit" ColumnName="TeamLimit" />
+                <ScalarProperty Name="Groups" ColumnName="Groups" />
                 <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
                 <ScalarProperty Name="CompetitionID" ColumnName="CompetitionID" />
@@ -87,6 +122,7 @@
           <EntitySetMapping Name="student">
             <EntityTypeMapping TypeName="totalmsgdbModel.student">
               <MappingFragment StoreEntitySet="student">
+                <ScalarProperty Name="CertainTeam" ColumnName="CertainTeam" />
                 <ScalarProperty Name="HasPermission" ColumnName="HasPermission" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
@@ -97,6 +133,18 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Phonenumber" ColumnName="Phonenumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="team">
+            <EntityTypeMapping TypeName="totalmsgdbModel.team">
+              <MappingFragment StoreEntitySet="team">
+                <ScalarProperty Name="Award" ColumnName="Award" />
+                <ScalarProperty Name="Member" ColumnName="Member" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

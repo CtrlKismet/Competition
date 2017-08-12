@@ -7,6 +7,7 @@
       <Diagram DiagramId="7769c541e2a44143bc605405564c041e" Name="Diagram1">
         <EntityTypeShape EntityType="totalmsgdbModel.competition" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="totalmsgdbModel.student" Width="1.5" PointX="3.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="totalmsgdbModel.team" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

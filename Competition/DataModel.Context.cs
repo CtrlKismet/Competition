@@ -27,5 +27,6 @@ namespace Competition
     
         public virtual DbSet<competition> competition { get; set; }
         public virtual DbSet<student> student { get; set; }
+        public virtual DbSet<team> team { get; set; }
     }
 }

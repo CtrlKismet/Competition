@@ -15,8 +15,8 @@
 <body>
     <h3>用户信息 : </h3>
     <form action="/Home/UserSettings" method="post">
-        用户名 : <input type="text" name="StudentID" value="@Model.StudentID" readonly="readonly"/><br />
-        学号 : <input type="text" name="StudentName" value="@Model.StudentName" readonly="readonly"/><br />
+        用户名 : <input type="text" name="StudentName" value="@Model.StudentName" readonly="readonly"/><br />
+        学号 : <input type="text" name="StudentID" value="@Model.StudentID" readonly="readonly"/><br />
         班级：<input type="text" name="ClassID" value="@Model.ClassID"/><br />
         性别 :
         @if (Model.Gender == 1)

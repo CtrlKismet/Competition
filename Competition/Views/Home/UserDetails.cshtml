@@ -1,0 +1,136 @@
+﻿@using Competition.ViewModels
+@model student
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = "用户";
+    MsgBusinessLayer msgBal = new MsgBusinessLayer();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户设置</title>
+</head>
+<body>
+    <div class="row-fluid">
+        <div class="col-md-4">
+            <table class="table table-striped table-condensed table-bordered fiexd">
+                <tr>
+                    <th style="width: 5em;">学号</th>
+                    <td>@Model.StudentID</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">用户名</th>
+                    <td>@Model.StudentName</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">班级</th>
+                    <td>@Model.ClassID</td>
+                </tr>
+                @{
+                    string grade = "unknown";
+                    switch (Model.Grade)
+                    {
+                        case 1: grade = "大一"; break;
+                        case 2: grade = "大二"; break;
+                        case 3: grade = "大三"; break;
+                        case 4: grade = "大四"; break;
+                    }
+
+                    string gender = "unkown";
+                    gender = Model.Gender == 1 ? "男" : "女";
+                }
+                <tr>
+                    <th style="width: 5em;">年级</th>
+                    <td>@grade</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">性别</th>
+                    <td>@gender</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">邮箱</th>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">手机号</th>
+                    <td>@Model.Phonenumber</td>
+                </tr>
+                <tr>
+                    <th style="width: 5em;">设置</th>
+                    <td>
+                        @{
+                            bool flag = false;
+                            if (User.Identity.Name == Model.StudentID)
+                            {
+                                flag = true;
+                            }
+                            else
+                            {
+                                student s = msgBal.GetStudentByID(User.Identity.Name);
+                                flag = (s.HasPermission > Model.HasPermission) ? true : false;
+                            }
+                        }
+                        @if (flag)
+                        {
+                            <a href="/Home/UserSettings"><span class="glyphicon glyphicon-cog"></span></a>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-cog"></span>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-8">
+            <table class="table table-striped table-condensed table-bordered table-hover fiexd">
+                <caption>已经报名的比赛：</caption>
+                <thead>
+                    <tr>
+                        <th style="width: 5em;">比赛名称</th>
+                        <th style="width: 5em;">开始时间</th>
+                        <th style="width: 5em;">队伍信息</th>
+                        <th style="width: 5em;">获奖情况</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        competition[] Competitions = new competition[20];
+                        team[] teams = new team[20];
+                        int len = (Model.CertainTeam==null)?0:Model.CertainTeam.Length;
+                        int ID = 0,count=0;
+                        for (int i = 0; i < len; i++)
+                        {
+                            if (Model.CertainTeam[i] != '&')
+                            {
+                                ID =ID*10+ Model.CertainTeam[i]-'0';
+                            }
+                            else
+                            {
+                                teams[count++] = msgBal.GetTeamByID(ID);
+                                ID = 0;
+                            }
+                        }
+                        for (int i = 0; i < len; i++)
+                        {
+                            if (Model.CertainTeam[i] != '&')
+                            {
+                                ID = ID * 10 + Model.CertainTeam[i] - '0';
+                            }
+                            else
+                            {
+                                teams[count++] = msgBal.GetTeamByID(ID);
+                                ID = 0;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

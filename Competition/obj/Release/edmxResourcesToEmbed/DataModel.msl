@@ -4,6 +4,9 @@
     <EntitySetMapping Name="competition">
       <EntityTypeMapping TypeName="totalmsgdbModel.competition">
         <MappingFragment StoreEntitySet="competition">
+          <ScalarProperty Name="Awards" ColumnName="Awards" />
+          <ScalarProperty Name="TeamLimit" ColumnName="TeamLimit" />
+          <ScalarProperty Name="Groups" ColumnName="Groups" />
           <ScalarProperty Name="Details" ColumnName="Details" />
           <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
           <ScalarProperty Name="CompetitionID" ColumnName="CompetitionID" />
@@ -15,6 +18,7 @@
     <EntitySetMapping Name="student">
       <EntityTypeMapping TypeName="totalmsgdbModel.student">
         <MappingFragment StoreEntitySet="student">
+          <ScalarProperty Name="CertainTeam" ColumnName="CertainTeam" />
           <ScalarProperty Name="HasPermission" ColumnName="HasPermission" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="StudentID" ColumnName="StudentID" />
@@ -25,6 +29,18 @@
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Phonenumber" ColumnName="Phonenumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="team">
+      <EntityTypeMapping TypeName="totalmsgdbModel.team">
+        <MappingFragment StoreEntitySet="team">
+          <ScalarProperty Name="Award" ColumnName="Award" />
+          <ScalarProperty Name="Member" ColumnName="Member" />
+          <ScalarProperty Name="Number" ColumnName="Number" />
+          <ScalarProperty Name="Group" ColumnName="Group" />
+          <ScalarProperty Name="CID" ColumnName="CID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -12,18 +12,13 @@ namespace Competition
     using System;
     using System.Collections.Generic;
     
-    public partial class student
+    public partial class team
     {
-        public string StudentID { get; set; }
-        public int ClassID { get; set; }
-        public int Grade { get; set; }
-        public int Gender { get; set; }
-        public string StudentName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Phonenumber { get; set; }
         public int ID { get; set; }
-        public Nullable<sbyte> HasPermission { get; set; }
-        public string CertainTeam { get; set; }
+        public int CID { get; set; }
+        public int Group { get; set; }
+        public int Number { get; set; }
+        public string Member { get; set; }
+        public int Award { get; set; }
     }
 }

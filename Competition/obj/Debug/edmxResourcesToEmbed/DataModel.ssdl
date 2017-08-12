@@ -6,9 +6,12 @@
     </Key>
     <Property Name="CompetitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CompetitionName" Type="longtext" />
+    <Property Name="Groups" Type="int" Nullable="false" />
+    <Property Name="TeamLimit" Type="int" Nullable="false" />
     <Property Name="Details" Type="longtext" />
     <Property Name="StartTime" Type="datetime" Precision="0" Nullable="false" />
     <Property Name="EndTime" Type="datetime" Precision="0" Nullable="false" />
+    <Property Name="Awards" Type="longtext" />
   </EntityType>
   <EntityType Name="student">
     <Key>
@@ -24,9 +27,22 @@
     <Property Name="Password" Type="longtext" />
     <Property Name="Email" Type="longtext" />
     <Property Name="Phonenumber" Type="longtext" />
+    <Property Name="CertainTeam" Type="longtext" />
+  </EntityType>
+  <EntityType Name="team">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="CID" Type="int" Nullable="false" />
+    <Property Name="Group" Type="int" Nullable="false" />
+    <Property Name="Number" Type="int" Nullable="false" />
+    <Property Name="Member" Type="longtext" />
+    <Property Name="Award" Type="int" Nullable="false" />
   </EntityType>
   <EntityContainer Name="totalmsgdbModelStoreContainer">
     <EntitySet Name="competition" EntityType="Self.competition" Schema="totalmsgdb" store:Type="Tables" />
     <EntitySet Name="student" EntityType="Self.student" Schema="totalmsgdb" store:Type="Tables" />
+    <EntitySet Name="team" EntityType="Self.team" Schema="totalmsgdb" store:Type="Tables" />
   </EntityContainer>
 </Schema>
