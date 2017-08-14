@@ -76,13 +76,24 @@ namespace Competition.Controllers
                 flag = false;
             }
 
-            if (flag || t.Number > c.TeamLimit)
+            if (!flag || t.Number > c.TeamLimit)
             {
                 tmp.ErrorMsg = "输入的用户不符合参赛要求！";
                 return View("ErrorRegister", tmp);
             }
-            
-            return RedirectToAction("UserSettings", "Home");
+
+            //保存队伍
+            msgBal.SaveSTeam(t);
+            t = msgBal.GetTeamIDByTeam(t);
+            //更新队员信息
+            foreach (string m in tmp.member)
+            {
+                student s = msgBal.GetStudentByID(m);
+                student s1 = s;s1.CertainTeam += t.ID + "&";
+                msgBal.RefreshStudent(s1);
+            }
+
+            return RedirectToAction("UserDetails", "Home",new { ID = User.Identity.Name });
         }
 
         /// <summary>

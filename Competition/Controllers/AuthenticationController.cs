@@ -17,7 +17,7 @@ namespace Competition.Controllers
         }
 
         /// <summary>
-        /// 登录 Post
+        /// 登录验证
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -38,13 +38,33 @@ namespace Competition.Controllers
         }
 
         /// <summary>
+        /// 下拉窗口登录验证
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SubLogin(student s)
+        {
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            if (msgBal.IsValidUser(s))
+            {
+                FormsAuthentication.SetAuthCookie(s.StudentID, false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+        }
+
+        /// <summary>
         /// 登出
         /// </summary>
         /// <returns></returns>
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

@@ -17,28 +17,54 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!--
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                -->
-                @{ 
+                @{
                     MsgBusinessLayer msgBal = new MsgBusinessLayer();
                     string userName = msgBal.GetUserNameByID(User.Identity.Name);
                 }
-                <text class="navbar-brand">Welcome @userName !</text>
+                @Html.ActionLink("Welcome!", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("用户", "UserDetails", "Home",new { ID=User.Identity.Name })</li>
+                    <li>@Html.ActionLink("比赛", "Index", "Home")</li>
+                    <li class="dropdown">@Html.ActionLink("用户", "UserDetails", "Home", new { ID = User.Identity.Name })</li>
+                    <!--显示名称      方法名     控制器名-->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.Name != "")
                     {
-                        <li>@Html.ActionLink("登出", "Logout", "Authentication")</li>
+                        <li class="dropdown">
+                            <a href="/Home/UserDetails?ID=@User.Identity.Name" class="dropdown-toggle" data-toggle="dropdown">
+                                @userName<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/Home/UserDetails?ID=@User.Identity.Name"><span class="glyphicon glyphicon-user"></span>  @userName</a></li>
+                                <li><a href="/Home/UserSettings"><span class="glyphicon glyphicon-cog"></span>  用户设置</a></li>
+                                <li><a href="/Authentication/Logout"><span class="glyphicon glyphicon-off"></span>  退出登录</a></li>
+                            </ul>
+                        </li>
                     }
                     else
                     {
+                        <li class="dropdown">
+                            <a href="/Home/Index" class="dropdown-toggle" data-toggle="dropdown">
+                                登录<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="col-lg-4">
+                                    <form action="/Authentication/SubLogin" method="post" class="form-inline center">
+                                        <input type="text" name="StudentID" required title="Username required" placeholder="学号" /><br />
+                                        <input type="password" name="Password" required title="Password required" placeholder="密码" /><br />
+                                        <br />
+                                        <button class="btn btn-primary btn-sm">登录</button>
+                                    </form>
+                                </li>
+                                <li><a href="/Authentication/Register" title="Register"><span class="glyphicon glyphicon-log-in"></span>  注册</a></li>
+                            </ul>
+                        </li>
+                        <!--
                         <li>@Html.ActionLink("登录", "Login", "Authentication")</li>
+                        -->
                     }
-                    <!--显示名称      方法名     控制器名-->
                 </ul>
             </div>
         </div>
@@ -46,11 +72,12 @@
     <br />
     <div class="container body-content">
         @RenderBody()
-        <hr />
-    </div>
-    <div class="modal-footer">
-        <p>Created By Ctrlkismet.  Powered by <a href="http://getbootstrap.com/2.3.2/" target="_blank">bootstrap</a>.</p>
-        <p>Currect Time is : @System.DateTime.Now</p>
+        <!--<hr />-->
+        <br />
+        <div class="modal-footer">
+            <p>Created By Ctrlkismet.  Powered By <a href="http://getbootstrap.com/2.3.2/" target="_blank">Bootstrap</a>.</p>
+            <p>Currect Time is : @System.DateTime.Now</p>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

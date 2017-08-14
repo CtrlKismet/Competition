@@ -13,12 +13,19 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>所有比赛</h1>
-    @if(Model.HasPermission)
-    {
-        <a href="/Manage/Add">新建比赛</a>
-    }
-    @if(Model.Competitions.Count!=0)
+    <div style="font-size:medium;font-weight:bold;">
+        所有比赛&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        @if (Model.HasPermission)
+        {
+            <a href="/Manage/Add">
+                <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> 新建比赛
+                </button>
+            </a>
+        }
+    </div>
+    <br />
+    @if (Model.Competitions.Count != 0)
     {
         <table class="table table-bordered table-hover">
             <thead>

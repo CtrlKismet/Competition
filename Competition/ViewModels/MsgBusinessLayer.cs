@@ -63,6 +63,7 @@ namespace Competition.ViewModels
                 s1.Gender = s.Gender;
                 s1.Grade = s.Grade;
                 s1.ClassID = s.ClassID;
+                s1.CertainTeam = s.CertainTeam;
                 /*
                  * Other Propertities is not posted to this function
                 */
@@ -131,6 +132,9 @@ namespace Competition.ViewModels
                 c1.Details = c.Details;
                 c1.StartTime = c.StartTime;
                 c1.EndTime = c.EndTime;
+                c1.Groups = c.Groups;
+                c1.TeamLimit = c.TeamLimit;
+                c1.Awards = c.Awards;
                 msgEts.SaveChanges();
                 return true;
             }
@@ -151,6 +155,18 @@ namespace Competition.ViewModels
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             team t = msgEts.team.FirstOrDefault(m => m.ID == ID);
             return t;
+        }
+
+        /// <summary>
+        /// 确认队伍的编号
+        /// </summary>
+        /// <param name="ID">要查询的队伍</param>
+        /// <returns></returns>
+        public team GetTeamIDByTeam(team t)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            team t1 = msgEts.team.FirstOrDefault(m=>m.Member==t.Member&&m.CID==t.CID);
+            return t1;
         }
 
         /// <summary>
