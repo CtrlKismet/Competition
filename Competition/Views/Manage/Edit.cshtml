@@ -13,14 +13,66 @@
     <title>UserSettings</title>
 </head>
 <body>
-    <h3>比赛信息 : </h3>
-    <form action="/Manage/Edit" method="post">
-        比赛名称 : <input type="text" name="CompetitionName" value="@Model.CompetitionName" /><br />
-        比赛详情 : <input type="text" name="Details" value="@Model.Details" /><br />
-        比赛开始时间 : <input type="text" name="StartTime" value="@Model.StartTime" /><br />
-        报名截止时间 : <input type="text" name="EndTime" value="@Model.EndTime" /><br />
-        <input type="hidden" name="CompetitionID" value="@Model.CompetitionID" />
-        <button type="submit">确认更改</button>
+    <p id="default_group" hidden="hidden">@Model.Groups</p>
+    <script>
+        var group = document.getElementById("default_group").innerHTML;
+        $(function () {
+            if (group >= 1000) {
+                $("#grade1").attr("checked", true);
+            }
+            if (group % 1000 >= 200) {
+                $("#grade2").attr("checked", true);
+
+            }
+            if (group % 100 >= 30) {
+                $("#grade3").attr("checked", true);
+            }
+            if (group % 10 >= 4) {
+                $("#grade4").attr("checked", true);
+            }
+        });
+    </script>
+    <form action="/Manage/Edit" method="post" class="form-horizontal" role="form">
+        <input type="text" name="CompetitionID" value="@Model.CompetitionID" hidden="hidden" />
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">比赛名称</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="CompetitionName" value="@Model.CompetitionName" style="max-width:1000px;font-size:large;" /></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">详情</label>
+            <div class="col-md-10"><textarea rows="30" class="form-control" name="Details" style="max-width:1000px;font-size:large;">@Model.Details</textarea></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">比赛开始时间</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="StartTime" value="@Model.StartTime.ToString("D")" style="max-width:1000px;font-size:large;" /></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">报名截止时间</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="EndTime" value="@Model.EndTime.ToString("D")" style="max-width:1000px;font-size:large;" /></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 control-label" style="font-size:large;">组别</label>
+            <div class="col-md-4">
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" id="grade1" value="1" style="font-size:large;"> 大一
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" id="grade2" value="2" style="font-size:large;"> 大二
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" id="grade3" value="3" style="font-size:large;"> 大三
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" id="grade4" value="4" style="font-size:large;"> 大四
+                </label>
+            </div>
+            <label class="col-md-2 control-label" style="font-size:large;">组队人数限制</label>
+            <div class="col-md-1"><input type="text" class="form-control" value="@Model.TeamLimit" name="TeamLimit" style="font-size:large;"/></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;"></label>
+            <div class="col-md-10"><button class="btn btn-default btn-group-lg">确认修改</button></div>
+        </div>
     </form>
 </body>
 </html>

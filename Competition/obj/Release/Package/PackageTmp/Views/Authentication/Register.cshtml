@@ -1,6 +1,7 @@
 ﻿
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = "注册";
 }
 
 <!DOCTYPE html>
@@ -11,25 +12,60 @@
     <title>Register</title>
 </head>
 <body>
-    <div> 
+    <div class="container">
         <form action="/Authentication/Register" method="post">
-            学号 : <input type="text" name="StudentID" /><br />
-            班级：<input type="text" name="ClassID" /><br />
-            用户名 : <input type="text" name="StudentName" /><br />
-            密码 : <input type="password" name="Password" /><br />
-            重复密码 : <input type="password" name="Concerned" /><br />
-            性别 : <label><input type="radio" name="Gender" value="1"/>男 </label>
-                     <label><input type="radio" name="Gender" value="0"/>女 </label><br />
-            年级 : 
-            <select>
-                <option value="1">大一</option>
-                <option value="2">大二</option>
-                <option value="3">大三</option>
-                <option value="4">大四</option>
-            </select><br />
-            电话号码 : <input type="text" name="Phonenumber" /><br />
-            邮箱 : <input type="text" name="Email" /><br />
-            <button>注册</button>
+            <table class="table-condensed">
+                <tr>
+                    <th class="text-center">学号</th>
+                    <td><input type="text" name="StudentID" required/></td>
+                </tr>
+                <tr>
+                    <th class="text-center">班级</th>
+                    <td><input type="text" name="ClassID"  required/></td>
+                </tr>
+                <tr>
+                    <th class="text-center">用户名</th>
+                    <td><input type="text" name="StudentName" required/></td>
+                </tr>
+                <tr>
+                    <th class="text-center">密码</th>
+                    <td><input type="password" name="Password" required/></td>
+                </tr>
+                <tr>
+                    <th class="text-center">重复密码&nbsp;&nbsp;&nbsp;</th>
+                    <td><input type="password" name="Concerned" /></td>
+                </tr>
+                <tr>
+                    <th class="text-center">性别</th>
+                    <td>
+                        <label><input type="radio" name="Gender" value="1" required/>男 </label>
+                        <label><input type="radio" name="Gender" value="0" />女 </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">年级</th>
+                    <td>
+                        <select name="Grade">
+                            <option value="1">大一</option>
+                            <option value="2">大二</option>
+                            <option value="3">大三</option>
+                            <option value="4">大四</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">电话号码</th>
+                    <td><input type="text" name="Phonenumber" required/></td>
+                </tr>
+                <tr>
+                    <th class="text-center">邮箱</th>
+                    <td><input type="text" name="Email" required/></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><button class="btn btn-default">注册</button></td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

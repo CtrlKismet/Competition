@@ -1,24 +1,53 @@
 ﻿
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
+    ViewBag.title = "新建比赛";
 }
-
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Register</title>
-</head>
 <body>
-    <div>
-        <form action="/Manage/Add" method="post">
-            比赛名称 : <input type="text" name="CompetitionName" /><br />
-            详情 : <input type="text" name="Details" /><br />
-            比赛开始时间 : <input type="text" name="StartTime" /><br />
-            报名截止时间 : <input type="text" name="EndTime" /><br />
-            <button>添加</button>
-        </form>
-    </div>
+    <form action="/Manage/Add" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">比赛名称</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="CompetitionName" style="max-width:1000px;" required/></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">详情</label>
+            <div class="col-md-10"><textarea rows="30" class="form-control" name="Details" style="max-width:1000px;" required></textarea></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">比赛开始时间</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="StartTime" style="max-width:1000px;" required/></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;">报名截止时间</label>
+            <div class="col-md-10"><input type="text" class="form-control" name="EndTime" style="max-width:1000px;" required/></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 control-label" style="font-size:large;">组别</label>
+            <div class="col-md-4">
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" value="1" style="font-size:large;" checked="checked"> 大一
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" value="2" style="font-size:large;"> 大二
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" value="3" style="font-size:large;"> 大三
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="grade" value="4" style="font-size:large;"> 大四
+                </label>
+            </div>
+            <label class="col-md-2 control-label" style="font-size:large;">组队人数限制</label>
+            <div class="col-md-1"><input type="text" class="form-control" name="TeamLimit" required/></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" style="font-size:large;"></label>
+            <div class="col-md-10"><button class="btn btn-default btn-group-lg">添加</button></div>
+        </div>
+    </form>
 </body>
 </html>

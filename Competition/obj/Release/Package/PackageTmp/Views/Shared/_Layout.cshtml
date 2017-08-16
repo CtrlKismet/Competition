@@ -3,14 +3,17 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container" style="width:90%;">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -26,7 +29,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("比赛", "Index", "Home")</li>
-                    <li class="dropdown">@Html.ActionLink("用户", "UserDetails", "Home", new { ID = User.Identity.Name })</li>
+                    <li><a href="/Home/UserDetails?ID=@User.Identity.Name">用户</a></li>
                     <!--显示名称      方法名     控制器名-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -50,13 +53,18 @@
                                 登录<b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="col-lg-4">
-                                    <form action="/Authentication/SubLogin" method="post" class="form-inline center">
-                                        <input type="text" name="StudentID" required title="Username required" placeholder="学号" /><br />
-                                        <input type="password" name="Password" required title="Password required" placeholder="密码" /><br />
+                                <li class="col-md-12 container">
+                                    <form action="/Authentication/SubLogin" method="post" class="form-horizontal" role="form">
                                         <br />
-                                        <button class="btn btn-primary btn-sm">登录</button>
+                                        <div class="form-group">
+                                            <div class="col-md-12"><input type="text" class="form-control" name="StudentID" required title="Username required" placeholder="学号" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12"><input type="password" class="form-control" name="Password" required title="Password required" placeholder="密码" /></div>
+                                        </div>
+                                        <div><button class="btn btn-primary btn-sm">登录</button></div>
                                     </form>
+                                    <br />
                                 </li>
                                 <li><a href="/Authentication/Register" title="Register"><span class="glyphicon glyphicon-log-in"></span>  注册</a></li>
                             </ul>
@@ -70,18 +78,14 @@
         </div>
     </div>
     <br />
-    <div class="container body-content">
+    <div class="container" style="width:80%;">
         @RenderBody()
         <!--<hr />-->
         <br />
-        <div class="modal-footer">
-            <p>Created By Ctrlkismet.  Powered By <a href="http://getbootstrap.com/2.3.2/" target="_blank">Bootstrap</a>.</p>
-            <p>Currect Time is : @System.DateTime.Now</p>
-        </div>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <div class="modal-footer">
+        <p>Created By <a href="mailto:2464676281@qq.com">Ctrlkismet</a>.  Powered By <a href="http://getbootstrap.com/2.3.2/" target="_blank">Bootstrap</a>.</p>
+        <p>Currect Time is : @System.DateTime.Now</p>
+    </div>
 </body>
 </html>

@@ -40,20 +40,45 @@ namespace Competition.Controllers
         {
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
             competition c = msgBal.GetCompetitionByID(tmp.number);
+
+            //已经超过报名截止时间
+            if (System.DateTime.Now.Date > c.EndTime.Date)
+            {
+                tmp.ErrorMsg = "已经超过报名时间！";
+                return View("ErrorRegister", tmp);
+            }
+
             team t = new team();
+
+            List<student> templateStudents = new List<student>();
             bool[] vis = new bool[5];
-            int group = 0;
+            int group = 0, count = 0;
 
             //将表格信息转化为队伍信息
             foreach (string m in tmp.member)
             {
+                if (m == "" || m == null) continue;
                 t.Member += m + "&";
                 student s = msgBal.GetStudentByID(m);
                 if (s == null)
                 {
-                    tmp.ErrorMsg = "输入的用户不存在！";
+                    tmp.ErrorMsg = "用户 \"" + m + "\" 不存在！";
                     return View("ErrorRegister", tmp);
                 }
+
+                string errorMsg = msgBal.CanRegisterToCompetition(s, c);
+                if (errorMsg != null)
+                {
+                    tmp.ErrorMsg = "用户 \"" + m +"\" "+ errorMsg;
+                    return View("ErrorRegister", tmp);
+                }
+
+                if(templateStudents.FirstOrDefault(x=>x.StudentID==s.StudentID)!=null)
+                {
+                    tmp.ErrorMsg = "用户 \"" + m + "\" 重复填写！";
+                    return View("ErrorRegister", tmp);
+                }
+                templateStudents.Add(s);
                 if (!vis[s.Grade])
                 {
                     switch (s.Grade)
@@ -65,37 +90,52 @@ namespace Competition.Controllers
                     }
                     vis[s.Grade] = true;
                 }
+                count++;
             }
             t.CID = tmp.number;
             t.Group = group;
-            t.Number = tmp.member.Length;
+            t.Number = count;
 
-            bool flag = true;
-            if (group>c.Groups|| group%1000 > c.Groups%1000 || group % 100 > c.Groups % 100 || group % 10 > c.Groups % 10)
+            if (t.Number > c.TeamLimit)
             {
-                flag = false;
-            }
-
-            if (!flag || t.Number > c.TeamLimit)
-            {
-                tmp.ErrorMsg = "输入的用户不符合参赛要求！";
+                tmp.ErrorMsg = "参赛人数超过限制！";
                 return View("ErrorRegister", tmp);
             }
 
             //保存队伍
             msgBal.SaveSTeam(t);
             t = msgBal.GetTeamIDByTeam(t);
+
             //更新队员信息
             foreach (string m in tmp.member)
             {
                 student s = msgBal.GetStudentByID(m);
-                student s1 = s;s1.CertainTeam += t.ID + "&";
+                student s1 = s; s1.CertainTeam += t.ID + "&";
                 msgBal.RefreshStudent(s1);
             }
 
-            return RedirectToAction("UserDetails", "Home",new { ID = User.Identity.Name });
+            return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
         }
 
+        /// <summary>
+        /// 删除一支队伍
+        /// </summary>
+        /// <param name="ID">队伍的ID</param>
+        /// <returns></returns>
+        [Authorize]
+        public ActionResult DeleteTeam(int? ID)
+        {
+            if (ID.HasValue)
+            {
+                MsgBusinessLayer msgBal = new MsgBusinessLayer();
+                student s = msgBal.GetStudentByID(User.Identity.Name);
+                if(s.HasPermission!=0)
+                {
+                    msgBal.DeleteTeam(ID.Value);
+                }
+            }
+            return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
+        }
         /// <summary>
         /// 删除一场比赛
         /// </summary>
@@ -107,6 +147,11 @@ namespace Competition.Controllers
             if (ID.HasValue)
             {
                 MsgBusinessLayer msgBal = new MsgBusinessLayer();
+                student s = msgBal.GetStudentByID(User.Identity.Name);
+                if (s.HasPermission == 0)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
                 msgBal.DeleteCompetition(ID.Value);
             }
             return RedirectToAction("Index", "Home");
@@ -122,6 +167,11 @@ namespace Competition.Controllers
         {
             if (!ID.HasValue) return RedirectToAction("Index", "Home");
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            student s = msgBal.GetStudentByID(User.Identity.Name);
+            if (s.HasPermission == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             competition c = msgBal.GetCompetitionByID(ID.Value);
             return View(c);
         }
@@ -133,7 +183,7 @@ namespace Competition.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public ActionResult Edit(competition c)
+        public ActionResult Edit(TemplateCompetition c)
         {
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
             if (msgBal.RefreshCompetition(c)) return RedirectToAction("Index", "Home");
@@ -147,6 +197,12 @@ namespace Competition.Controllers
         [Authorize]
         public ActionResult Add()
         {
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            student s = msgBal.GetStudentByID(User.Identity.Name);
+            if (s.HasPermission == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -157,18 +213,55 @@ namespace Competition.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public ActionResult Add(competition c)
+        public ActionResult Add(TemplateCompetition c)
         {
             MsgBusinessLayer bal = new MsgBusinessLayer();
-            bal.SaveCompetition(c);
+            competition c1 = new competition();
+            c1.CompetitionName = c.CompetitionName;
+            c1.Details = c.Details;
+            c1.StartTime = c.StartTime;
+            c1.EndTime = c.EndTime;
+            c1.TeamLimit = c.TeamLimit;
+            c1.Groups = 0;
+            foreach (int group in c.grade)
+            {
+                switch (group)
+                {
+                    case 1: c1.Groups += 1000; break;
+                    case 2: c1.Groups += 200; break;
+                    case 3: c1.Groups += 30; break;
+                    case 4: c1.Groups += 4; break;
+                }
+            }
+            bal.SaveCompetition(c1);
             return RedirectToAction("Index", "Home");
         }
     }
 
     public class TemplateTeam
     {
+        /// <summary>
+        /// 比赛ID
+        /// </summary>
         public int number { get; set; }
+        /// <summary>
+        /// 成员学号
+        /// </summary>
         public string[] member { get; set; }
         public string ErrorMsg { get; set; }
+    }
+
+    public class TemplateCompetition
+    {
+        public int CompetitionID { get; set; }
+        public string CompetitionName { get; set; }
+        public string Details { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int TeamLimit { get; set; }
+        /// <summary>
+        /// 复选框中参赛组别
+        /// </summary>
+        public int[] grade { get; set; }
     }
 }

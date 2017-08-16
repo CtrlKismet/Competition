@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = "首页";
+    string group = "";
 }
 
 <!DOCTYPE html>
@@ -17,10 +18,8 @@
         所有比赛&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         @if (Model.HasPermission)
         {
-            <a href="/Manage/Add">
-                <button type="button" class="btn btn-default btn-sm">
+            <a href="/Manage/Add" class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-plus"></span> 新建比赛
-                </button>
             </a>
         }
     </div>
@@ -30,19 +29,52 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
+                    <th>比赛编号</th>
                     <th>比赛名称</th>
                     <th>比赛开始日期</th>
                     <th>报名截止日期</th>
+                    <th>参赛年级</th>
                     <th>管理</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (competition c in Model.Competitions)
                 {
+                    group = "";
+                    if (c.Groups >= 1000)
+                    {
+                        group += "大一";
+                    }
+                    if (c.Groups % 1000 >= 200)
+                    {
+                        if (group != "")
+                        {
+                            group += "、";
+                        }
+                        group += "大二";
+                    }
+                    if (c.Groups % 100 >= 30)
+                    {
+                        if (group != "")
+                        {
+                            group += "、";
+                        }
+                        group += "大三";
+                    }
+                    if (c.Groups % 10 >= 4)
+                    {
+                        if (group != "")
+                        {
+                            group += "、";
+                        }
+                        group += "大四";
+                    }
                     <tr>
+                        <td>@c.CompetitionID</td>
                         <td><a href="/Home/ViewCompetition?ID=@c.CompetitionID">@c.CompetitionName</a></td>
                         <td>@c.StartTime.ToString("D")</td>
                         <td>@c.EndTime.ToString("D")</td>
+                        <td>@group</td>
                         @if (Model.HasPermission)
                         {
                             <td>

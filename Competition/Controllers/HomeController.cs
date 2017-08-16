@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace Competition.Controllers
 {
-
     public class HomeController : Controller
     {
         /// <summary>

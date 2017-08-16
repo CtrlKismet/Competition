@@ -94,69 +94,61 @@
                         <th style="width: 5em;">比赛名称</th>
                         <th style="width: 5em;">开始时间</th>
                         <th style="width: 5em;">队伍成员</th>
-                        <!--<th style="width: 5em;">获奖情况</th>-->
+                        <th style="width: 5em;">队伍管理</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
-                        competition[] Competitions = new competition[20];
-                        team[] teams = new team[20];
-                        string[] teamMember = new string[20];
-                        int len = (Model.CertainTeam==null)?0:Model.CertainTeam.Length;
-                        int ID = 0,count=0;
+                        List<competition> Competitions = new List<competition>();
+                        List<team> teams = new List<team>();
+                        //姓名
+                        List<string> teamMember = new List<string>();
+                        //学号
+                        List<string> teamLeader = new List<string>();
 
-                        for (int i = 0; i < len; i++)
+                        List<string> teamIDs = msgBal.GetMessage(Model.CertainTeam);
+
+                        foreach (string id in teamIDs)
                         {
-                            //得到当前队伍编号
-                            if (Model.CertainTeam[i] != '&')
-                            {
-                                ID =ID*10+ Model.CertainTeam[i]-'0';
-                            }
-                            else
-                            {
-                                teams[count] = msgBal.GetTeamByID(ID);
-                                Competitions[count] = msgBal.GetCompetitionByID(teams[count].CID);
+                            int ID = Convert.ToInt32(id);
+                            team t = msgBal.GetTeamByID(ID);
+                            teams.Add(t);
+                            Competitions.Add(msgBal.GetCompetitionByID(t.CID));
 
-                                //得到当前队伍的人员信息
-                                int len1 = teams[count].Member.Length;string id = "";
-                                for (int j = 0; j < len1; j++)
+                            List<string> teamMemberID = msgBal.GetMessage(t.Member);
+
+                            string temp = null;
+                            //得到当前队伍的人员信息
+                            foreach (string id1 in teamMemberID)
+                            {
+                                if (temp != null)
                                 {
-                                    if(teams[count].Member[j]!='&')
-                                    {
-                                        id += teams[count].Member[j];
-                                    }
-                                    else
-                                    {
-                                        if (teamMember[count] != null)
-                                        {
-                                            teamMember[count] += "、";
-                                        }
-                                        teamMember[count] += msgBal.GetUserNameByID(id);
-                                        id = "";
-                                    }
+                                    temp += "、";
                                 }
-                                count++; ID = 0;
+                                else
+                                {
+                                    teamLeader.Add(id1);
+                                }
+                                temp += msgBal.GetUserNameByID(id1);
                             }
+                            teamMember.Add(temp);
                         }
-                        /*for (int i = 0; i < len; i++)
-                        {
-                            if (Model.CertainTeam[i] != '&')
-                            {
-                                ID = ID * 10 + Model.CertainTeam[i] - '0';
-                            }
-                            else
-                            {
-                                teams[count++] = msgBal.GetTeamByID(ID);
-                                ID = 0;
-                            }
-                        }*/
                     }
-                    @for (int i = 0; i < count; i++)
+                    @foreach (team t in teams)
                     {
+                        int i = teams.IndexOf(t);
                         <tr>
                             <td><a href="/Home/ViewCompetition?ID=@Competitions[i].CompetitionID">@Competitions[i].CompetitionName</a></td>
                             <td>@Competitions[i].StartTime.ToString("D")</td>
                             <td>@teamMember[i]</td>
+                            @if (Model.StudentID == User.Identity.Name && teamLeader[i] == User.Identity.Name)
+                            {
+                                <td><a href="/Manage/DeleteTeam?ID=@teams[i].ID"><span class="glyphicon glyphicon-trash"></span>  删除队伍</a></td>
+                            }
+                            else
+                            {
+                                <td><span class="glyphicon glyphicon-trash"></span>  删除比赛</td>
+                            }
                         </tr>
                     }
                 </tbody>

@@ -2,6 +2,36 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = Model.CompetitionName;
+
+    string group = "";
+    if (Model.Groups >= 1000)
+    {
+        group += "大一";
+    }
+    if (Model.Groups % 1000 >= 200)
+    {
+        if (group != "")
+        {
+            group += "、";
+        }
+        group += "大二";
+    }
+    if (Model.Groups % 100 >= 30)
+    {
+        if (group != "")
+        {
+            group += "、";
+        }
+        group += "大三";
+    }
+    if (Model.Groups % 10 >= 4)
+    {
+        if (group != "")
+        {
+            group += "、";
+        }
+        group += "大四";
+    }
 }
 
 <!DOCTYPE html>
@@ -16,6 +46,8 @@
     <h3> 
         @Model.Details
     </h3>
+    <div>每支队伍限人数 @Model.TeamLimit 人及以下。</div>
+    <div>仅限 @group 的同学参加。</div>
     <div>
         This Competition will start at : @Model.StartTime
     </div>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Competition.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Competition.ViewModels
     public class MsgBusinessLayer
     {
         #region StudentManagement
-        
+
         /// <summary>
         /// 通过学号获得用户
         /// </summary>
@@ -55,8 +56,8 @@ namespace Competition.ViewModels
         public bool RefreshStudent(student s)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            student s1= msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID);
-            if(s1!=null)
+            student s1 = msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID);
+            if (s1 != null)
             {
                 s1.Phonenumber = s.Phonenumber;
                 s1.Email = s.Email;
@@ -73,10 +74,43 @@ namespace Competition.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// 检测是否能报名参加这一场比赛
+        /// </summary>
+        /// <param name="s">需要报名的学生</param>
+        /// <param name="c">报名参加的比赛</param>
+        /// <returns>若不能返回错误信息，否则返回null</returns>
+        public string CanRegisterToCompetition(student s, competition c)
+        {
+            //组别不符合
+            switch (s.Grade)
+            {
+                case 1: if (c.Groups < 1000) { return "组别不符合！"; } break;
+                case 2: if (c.Groups % 1000 < 200) { return "组别不符合！"; } break;
+                case 3: if (c.Groups % 100 < 30) { return "组别不符合！"; } break;
+                case 4: if (c.Groups % 10 < 4) { return "组别不符合！"; } break;
+            }
+
+            //用户已经报名参加
+            List<string> teams = new List<string>();
+            teams=GetMessage(s.CertainTeam);
+
+            foreach (string id in teams)
+            {
+                int ID=Convert.ToInt32(id);
+                team t = GetTeamByID(ID);
+                if(t.CID==c.CompetitionID)
+                {
+                    return "用户已经报名参加过这场比赛！";
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region CompetitionManagement
-        
+
         /// <summary>
         /// 通过ID获得比赛
         /// </summary>
@@ -110,7 +144,7 @@ namespace Competition.ViewModels
         public bool DeleteCompetition(int ID)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            competition c= msgEts.competition.FirstOrDefault(m=>m.CompetitionID==ID);
+            competition c = msgEts.competition.FirstOrDefault(m => m.CompetitionID == ID);
             if (c == null) return false;
             msgEts.competition.Remove(c);
             msgEts.SaveChanges();
@@ -122,7 +156,7 @@ namespace Competition.ViewModels
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public bool RefreshCompetition(competition c)
+        public bool RefreshCompetition(TemplateCompetition c)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             competition c1 = msgEts.competition.FirstOrDefault(m => m.CompetitionID == c.CompetitionID);
@@ -132,9 +166,18 @@ namespace Competition.ViewModels
                 c1.Details = c.Details;
                 c1.StartTime = c.StartTime;
                 c1.EndTime = c.EndTime;
-                c1.Groups = c.Groups;
+                c1.Groups = 0;
+                foreach (int group in c.grade)
+                {
+                    switch (group)
+                    {
+                        case 1: c1.Groups += 1000; break;
+                        case 2: c1.Groups += 200; break;
+                        case 3: c1.Groups += 30; break;
+                        case 4: c1.Groups += 4; break;
+                    }
+                }
                 c1.TeamLimit = c.TeamLimit;
-                c1.Awards = c.Awards;
                 msgEts.SaveChanges();
                 return true;
             }
@@ -144,7 +187,7 @@ namespace Competition.ViewModels
         #endregion
 
         #region TeamManagement
-        
+
         /// <summary>
         /// 通过编号获取队伍
         /// </summary>
@@ -165,7 +208,7 @@ namespace Competition.ViewModels
         public team GetTeamIDByTeam(team t)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            team t1 = msgEts.team.FirstOrDefault(m=>m.Member==t.Member&&m.CID==t.CID);
+            team t1 = msgEts.team.FirstOrDefault(m => m.Member == t.Member && m.CID == t.CID);
             return t1;
         }
 
@@ -215,8 +258,31 @@ namespace Competition.ViewModels
         public bool DeleteTeam(int ID)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            team t = msgEts.team.FirstOrDefault(m => m.ID == ID);
+            team t = msgEts.team.FirstOrDefault(x => x.ID == ID);
             if (t == null) return false;
+
+            //修改队伍里成员的CertainTeam
+            List<string> teamMember = GetMessage(t.Member);
+
+            foreach (string m in teamMember)
+            {
+                student s = GetStudentByID(m);
+
+                List<string> studentTeam = GetMessage(s.CertainTeam);
+                string newCertainTeam = "";
+
+                foreach (string id in studentTeam)
+                {
+                    if (id != ID.ToString())
+                    {
+                        newCertainTeam += id + "&";
+                    }
+                }
+                
+                s.CertainTeam = newCertainTeam;
+                RefreshStudent(s);
+            }
+
             msgEts.team.Remove(t);
             msgEts.SaveChanges();
             return true;
@@ -234,7 +300,7 @@ namespace Competition.ViewModels
         public bool IsValidUser(student s)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            return msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID && m.Password == s.Password)!=null;
+            return msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID && m.Password == s.Password) != null;
         }
 
         /// <summary>
@@ -247,10 +313,44 @@ namespace Competition.ViewModels
             if (ID == "") return false;
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
-            return s.HasPermission!=0;
+            return s.HasPermission != 0;
+        }
+
+        /// <summary>
+        /// 将所存的字符串转化为数组
+        /// </summary>
+        /// <param name="Member"></param>
+        /// <returns></returns>
+        public List<string> GetMessage(string s)
+        {
+            if (s == null) return new List<string>();
+            List<string> msg = new List<string>();
+            int len = s.Length;
+            string m = "";
+            for (int i = 0; i < len; i++)
+            {
+                if (s[i] != '&')
+                {
+                    m += s[i];
+                }
+                else
+                {
+                    msg.Add(m);
+                    m = "";
+                }
+            }
+            return msg;
         }
         #endregion
 
     }
 
+}
+
+namespace Competition
+{
+    public class Global
+    {
+        public const int MAX_LENGTH = 20;
+    }
 }

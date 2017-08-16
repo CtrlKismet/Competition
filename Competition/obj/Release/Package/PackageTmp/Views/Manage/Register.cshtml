@@ -16,7 +16,8 @@
     <h2>队伍成员：</h2>
     <form action="/Manage/Register" method="post">
         <input type="hidden" name="number" value="@Model.CompetitionID" />
-        @for (int i = 1; i <= Model.TeamLimit; i++)
+        <br /><input type="text" name="member" placeholder="学号" required/><br />
+        @for (int i = 1; i < Model.TeamLimit; i++)
         {
             <br /><input type="text" name="member"  placeholder="学号"/><br />
         }
