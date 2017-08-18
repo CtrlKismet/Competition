@@ -68,7 +68,7 @@
                             {
                                 flag = true;
                             }
-                            else
+                            else if(User.Identity.Name!="")
                             {
                                 student s = msgBal.GetStudentByID(User.Identity.Name);
                                 flag = (s.HasPermission > Model.HasPermission) ? true : false;
@@ -76,7 +76,7 @@
                         }
                         @if (flag)
                         {
-                            <a href="/Home/UserSettings"><span class="glyphicon glyphicon-cog"></span></a>
+                            <a href="/Home/UserSettings?ID=@Model.StudentID"><span class="glyphicon glyphicon-cog"></span></a>
                         }
                         else
                         {
@@ -147,7 +147,7 @@
                             }
                             else
                             {
-                                <td><span class="glyphicon glyphicon-trash"></span>  删除比赛</td>
+                                <td><span class="glyphicon glyphicon-trash"></span>  删除队伍</td>
                             }
                         </tr>
                     }

@@ -273,6 +273,8 @@
     <Content Include="Views\Manage\Register.cshtml" />
     <Content Include="Views\Manage\ErrorRegister.cshtml" />
     <Content Include="Views\Home\UserDetails.cshtml" />
+    <Content Include="Views\Home\ShowUsers.cshtml" />
+    <Content Include="Views\Manage\ViewTeams.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

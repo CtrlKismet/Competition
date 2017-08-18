@@ -1,0 +1,50 @@
+﻿@using Competition.Controllers
+@model TemplateStudents
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title =Model.tittle;
+    string grade = "";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+</head>
+<body>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>用户编号</th>
+                <th>用户名称</th>
+                <th>学号</th>
+                <th>年级</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.students.Count != 0)
+            {
+                foreach (student s in Model.students)
+                {
+                    switch (s.Grade)
+                    {
+                        case 1: grade = "大一"; break;
+                        case 2: grade = "大二"; break;
+                        case 3: grade = "大三"; break;
+                        case 4: grade = "大四"; break;
+                        default: grade = "未知"; break;
+                    }
+                    <tr>
+                        <td>@s.ID</td>
+                        <td><a href="/Home/UserDetails?ID=@s.StudentID">@s.StudentName</a></td>
+                        <td>@s.StudentID</td>
+                        <td>@grade</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>

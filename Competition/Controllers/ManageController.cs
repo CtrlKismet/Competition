@@ -109,12 +109,34 @@ namespace Competition.Controllers
             //更新队员信息
             foreach (string m in tmp.member)
             {
+                if (m == "" || m == null) continue;
                 student s = msgBal.GetStudentByID(m);
                 student s1 = s; s1.CertainTeam += t.ID + "&";
                 msgBal.RefreshStudent(s1);
             }
 
             return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
+        }
+
+
+        /// <summary>
+        /// 查看队伍
+        /// </summary>
+        /// <param name="ID">比赛的ID</param>
+        /// <returns></returns>
+        public ActionResult ViewTeams(int ID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            List<team> t = msgEts.team.ToList();
+            List<team> t1 = new List<team>();
+            foreach (team Team in t)
+            {
+                if(Team.CID==ID)
+                {
+                    t1.Add(Team);
+                }
+            }
+            return View("ViewTeams",t1);
         }
 
         /// <summary>
@@ -136,6 +158,7 @@ namespace Competition.Controllers
             }
             return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
         }
+
         /// <summary>
         /// 删除一场比赛
         /// </summary>
