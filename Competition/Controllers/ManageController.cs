@@ -1,9 +1,13 @@
 ﻿using Competition.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 
 namespace Competition.Controllers
 {
@@ -69,11 +73,11 @@ namespace Competition.Controllers
                 string errorMsg = msgBal.CanRegisterToCompetition(s, c);
                 if (errorMsg != null)
                 {
-                    tmp.ErrorMsg = "用户 \"" + m +"\" "+ errorMsg;
+                    tmp.ErrorMsg = "用户 \"" + m + "\" " + errorMsg;
                     return View("ErrorRegister", tmp);
                 }
 
-                if(templateStudents.FirstOrDefault(x=>x.StudentID==s.StudentID)!=null)
+                if (templateStudents.FirstOrDefault(x => x.StudentID == s.StudentID) != null)
                 {
                     tmp.ErrorMsg = "用户 \"" + m + "\" 重复填写！";
                     return View("ErrorRegister", tmp);
@@ -131,12 +135,12 @@ namespace Competition.Controllers
             List<team> t1 = new List<team>();
             foreach (team Team in t)
             {
-                if(Team.CID==ID)
+                if (Team.CID == ID)
                 {
                     t1.Add(Team);
                 }
             }
-            return View("ViewTeams",t1);
+            return View("ViewTeams", t1);
         }
 
         /// <summary>
@@ -151,7 +155,7 @@ namespace Competition.Controllers
             {
                 MsgBusinessLayer msgBal = new MsgBusinessLayer();
                 student s = msgBal.GetStudentByID(User.Identity.Name);
-                if(s.HasPermission!=0)
+                if (s.HasPermission != 0)
                 {
                     msgBal.DeleteTeam(ID.Value);
                 }
@@ -259,7 +263,160 @@ namespace Competition.Controllers
             bal.SaveCompetition(c1);
             return RedirectToAction("Index", "Home");
         }
+
+        /// <summary>
+        /// 导出到Excel
+        /// </summary>
+        /// <param name="ID">比赛ID</param>
+        /// <returns></returns>
+        public FileResult Excel(int ID)
+        {
+            //获取list数据
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            List<team> t = msgEts.team.ToList();
+            List<team> t1 = new List<team>();
+            foreach (team Team in t)
+            {
+                if (Team.CID == ID)
+                {
+                    t1.Add(Team);
+                }
+            }
+
+            //创建Excel文件的对象
+            HSSFWorkbook book = new HSSFWorkbook();
+            //添加一个sheet
+            ISheet sheet1 = book.CreateSheet("Sheet1");
+
+            //表格设计
+            ICellStyle style = book.CreateCellStyle();
+            style.Alignment = HorizontalAlignment.Center;
+            style.VerticalAlignment = VerticalAlignment.Center;
+
+            for (int col = 0; col < 5; col++)
+            {
+                sheet1.SetDefaultColumnStyle(col, style);
+            }
+
+            ICellStyle cellStyle = book.CreateCellStyle();
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+
+            ICellStyle headerStyle = book.CreateCellStyle();
+            headerStyle.Alignment = HorizontalAlignment.Center;
+            headerStyle.VerticalAlignment = VerticalAlignment.Center;
+            headerStyle.BorderBottom = BorderStyle.Thin;
+            headerStyle.BorderLeft = BorderStyle.Thin;
+            headerStyle.BorderRight = BorderStyle.Thin;
+            headerStyle.BorderTop = BorderStyle.Thin;
+            IFont font = book.CreateFont();
+            font.Boldweight = short.MaxValue;
+            headerStyle.SetFont(font);
+
+            //给sheet1添加第一行的头部标题
+            string title = msgBal.GetCompetitionByID(ID).CompetitionName + "参赛队伍信息";
+            IRow row1 = sheet1.CreateRow(0);
+            sheet1.AddMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+            row1 = sheet1.GetRow(0);
+            row1.Height = 30 * 20;
+
+            ICell cell = row1.CreateCell(0);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue(title);
+            cell = row1.CreateCell(4);
+            cell.CellStyle = headerStyle;
+
+            //
+            row1 = sheet1.CreateRow(1);
+            row1.Height = 30 * 20;
+
+            cell = row1.CreateCell(0);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue("队伍编号");
+            sheet1.SetColumnWidth(0, 10 * 256);
+
+            cell = row1.CreateCell(1);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue("队伍成员");
+            sheet1.SetColumnWidth(1, 20 * 256);
+
+            cell = row1.CreateCell(2);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue("学号");
+            sheet1.SetColumnWidth(2, 20 * 256);
+
+            cell = row1.CreateCell(3);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue("电话");
+            sheet1.SetColumnWidth(3, 25 * 256);
+
+            cell = row1.CreateCell(4);
+            cell.CellStyle = headerStyle;
+            cell.SetCellValue("邮箱");
+            sheet1.SetColumnWidth(4, 30 * 256);
+
+            //将数据逐步写入sheet1各个行
+            int i = 1, j = 0;
+            foreach (team Team in t1)
+            {
+                i++; j = 0;
+                IRow rowTemplate;
+                List<string> members = msgBal.GetMessage(Team.Member);
+                foreach (string m in members)
+                {
+                    student s = msgBal.GetStudentByID(m);
+                    rowTemplate = sheet1.CreateRow(i + j);
+                    sheet1.SetColumnWidth(i + j, 30 * 256);
+                    rowTemplate.Height = 30 * 20; j++;
+
+                    cell = rowTemplate.CreateCell(1);
+                    cell.CellStyle = cellStyle;
+                    cell.SetCellValue(s.StudentName);
+
+                    cell = rowTemplate.CreateCell(2);
+                    cell.CellStyle = cellStyle;
+                    cell.SetCellValue(s.StudentID);
+
+                    cell = rowTemplate.CreateCell(3);
+                    cell.CellStyle = cellStyle;
+                    cell.SetCellValue(s.Phonenumber);
+
+                    cell = rowTemplate.CreateCell(4);
+                    cell.CellStyle = cellStyle;
+                    cell.SetCellValue(s.Email);
+                }
+                sheet1.AddMergedRegion(new CellRangeAddress(i, i + j - 1, 0, 0));
+
+                rowTemplate = sheet1.GetRow(i); 
+                cell = rowTemplate.CreateCell(0);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue(Team.ID);
+
+                if(i+j-1!=i)
+                {
+                    rowTemplate = sheet1.GetRow(i+j-1);
+                    cell = rowTemplate.CreateCell(0);
+                    cell.CellStyle = cellStyle;
+                }
+
+                i = i + j - 1;
+            }
+
+            // 写入到客户端 
+            MemoryStream ms = new MemoryStream();
+            book.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            competition c = msgBal.GetCompetitionByID(ID);
+            return File(ms, "application/vnd.ms-excel", title + ".xls");
+        }
+
     }
+
 
     public class TemplateTeam
     {

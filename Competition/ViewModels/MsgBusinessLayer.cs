@@ -101,7 +101,7 @@ namespace Competition.ViewModels
                 team t = GetTeamByID(ID);
                 if(t.CID==c.CompetitionID)
                 {
-                    return "用户已经报名参加过这场比赛！";
+                    return "已经报名参加过这场比赛！";
                 }
             }
             return null;

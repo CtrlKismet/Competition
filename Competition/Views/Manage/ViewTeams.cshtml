@@ -7,8 +7,16 @@
     string member = "";
     MsgBusinessLayer msgBal = new MsgBusinessLayer();
     List<string> studentID = new List<string>();
+    sbyte? p = 0;
+    if (User.Identity.Name != "")
+    {
+        p = msgBal.GetStudentByID(User.Identity.Name).HasPermission;
+    }
+    else
+    {
+        p = 0;
+    }
 }
-
 <!DOCTYPE html>
 
 <html>
@@ -17,13 +25,16 @@
     <title>Home</title>
 </head>
 <body>
+    <p id="hasPermission" hidden="hidden">@p</p>
     <table class="table table-bordered table-hover" style="width:50%;position:center;">
         <thead>
             <tr>
                 <th>队伍编号</th>
                 <th>队伍成员</th>
-                <th hidden="hidden">电话号码</th>
-                <th hidden="hidden">邮箱</th>
+                <!--
+                <th class="permision">电话号码</th>
+                <th class="permision">邮箱</th>
+                -->
             </tr>
         </thead>
         <tbody>
@@ -40,8 +51,10 @@
                         {
                             <tr>
                                 <td>@s.StudentName</td>
-                                <td hidden="hidden">@s.Phonenumber</td>
-                                <td hidden="hidden">@s.Email</td>
+                                <!--
+                                <td class="permision">@s.Phonenumber</td>
+                                <td class="permision">@s.Email</td>
+                                -->
                             </tr>
                         }
                         else
@@ -49,8 +62,10 @@
                             <tr>
                                 <td rowspan="@t.Number" class="text-center" style="font-size:larger;">@t.ID</td>
                                 <td>@s.StudentName</td>
-                                <td hidden="hidden">@s.Phonenumber</td>
-                                <td hidden="hidden">@s.Email</td>
+                                <!--
+                                <td class="permision">@s.Phonenumber</td>
+                                <td class="permision">@s.Email</td>
+                                -->
                             </tr>
                             member = "1";
                         }
@@ -59,5 +74,18 @@
             }
         </tbody>
     </table>
+    @if (Model.Count != 0)
+    {
+        <div><a href="/Manage/Excel?ID=@Model.First().CID" class="btn btn-default">导出到Excel</a></div>
+    }
+    <!--<script>
+        $(function () {
+            var x = $("#hasPermission").text();
+            if (x == '0')
+            {
+                $(".permision").hide();
+            }
+        });
+    </script>-->
 </body>
 </html>

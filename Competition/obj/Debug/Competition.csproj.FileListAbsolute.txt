@@ -97,3 +97,9 @@ F:\Program\Competition\Competition\bin\System.Web.WebPages.Razor.xml
 F:\Program\Competition\Competition\obj\Debug\Competition.csprojResolveAssemblyReference.cache
 F:\Program\Competition\Competition\obj\Debug\Competition.dll
 F:\Program\Competition\Competition\obj\Debug\Competition.pdb
+F:\Program\Competition\Competition\bin\ICSharpCode.SharpZipLib.dll
+F:\Program\Competition\Competition\bin\NPOI.dll
+F:\Program\Competition\Competition\bin\NPOI.OOXML.dll
+F:\Program\Competition\Competition\bin\NPOI.OpenXml4Net.dll
+F:\Program\Competition\Competition\bin\NPOI.OpenXmlFormats.dll
+F:\Program\Competition\Competition\bin\NPOI.xml
