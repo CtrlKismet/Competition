@@ -49,10 +49,14 @@
     <div>每支队伍限人数 @Model.TeamLimit 人及以下。</div>
     <div>仅限 @group 的同学参加。</div>
     <div>
-        This Competition will start at : @Model.StartTime
+        比赛开始时间 : @Model.StartTime
     </div>
     <div>
-        This Competition will end at : @Model.EndTime
+        报名截止时间 : @Model.EndTime
+    </div>
+    <div>
+        <a href="/Manage/Register?ID=@Model.CompetitionID">报名</a> |
+        <a href="/Manage/ViewTeams?ID=@Model.CompetitionID">查看队伍</a>
     </div>
 </body>
 </html>

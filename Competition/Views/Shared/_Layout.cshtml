@@ -1,10 +1,17 @@
 ﻿@using Competition.ViewModels
+
+@{ 
+    string title = ViewBag.Title + " | 比赛报名系统";
+}
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-    <title>@ViewBag.Title</title>
+    <link rel="icon" href="/MyIcon/science.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/MyIcon/science.ico" type="image/x-icon" /> 
+    <title>@title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
