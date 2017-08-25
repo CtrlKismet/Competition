@@ -179,6 +179,15 @@ namespace Competition.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
+                competition c = msgBal.GetCompetitionByID(ID.Value);
+                totalmsgdbEntities msgEts = new totalmsgdbEntities();
+                foreach (team t in msgEts.team.ToList())
+                {
+                    if(t.CID==ID)
+                    {
+                        msgBal.DeleteTeam(t.ID);
+                    }
+                }
                 msgBal.DeleteCompetition(ID.Value);
             }
             return RedirectToAction("Index", "Home");

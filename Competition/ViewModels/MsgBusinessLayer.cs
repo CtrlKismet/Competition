@@ -65,6 +65,7 @@ namespace Competition.ViewModels
                 s1.Grade = s.Grade;
                 s1.ClassID = s.ClassID;
                 s1.CertainTeam = s.CertainTeam;
+                s1.Password = s.Password;
                 /*
                  * Other Propertities is not posted to this function
                 */

@@ -12,6 +12,12 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
+    <script>
+        function delete_confirm()
+        {
+            return confirm("确定要删除吗？");
+        }
+    </script>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container" style="width:90%;">
             <div class="navbar-header">

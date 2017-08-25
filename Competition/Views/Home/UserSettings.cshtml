@@ -46,6 +46,10 @@
                     <th class="text-center">用户名</th>
                     <td><input type="text" name="StudentName" value="@Model.StudentName" readonly="readonly" /></td>
                 </tr>
+                <tr id="password">
+                    <th class="text-center">密码</th>
+                    <td><input type="text" name="Password" value="@Model.Password" /></td>
+                </tr>
                 <tr>
                     <th class="text-center">班级</th>
                     <td><input type="text" name="ClassID" value="@Model.ClassID" /></td>
@@ -78,10 +82,18 @@
                 </tr>
                 <tr>
                     <th><input type="text" name="CertainTeam" value="@Model.CertainTeam" hidden="hidden" /></th>
-                    <td><button class="btn btn-default">确认更改</button></td>
+                    <td><button class="btn btn-default">确认更改</button>  <p class="btn btn-default" id="modify" >修改密码</p></td>
                 </tr>
             </table>
         </form>
     </div>
+    <script>
+            $(function () {
+                $("#password").hide();
+                $("#modify").click(function () {
+                    $("#password").slideDown("slow");
+                });
+            });
+    </script>
 </body>
 </html>
