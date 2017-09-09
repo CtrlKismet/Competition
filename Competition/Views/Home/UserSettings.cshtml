@@ -36,62 +36,97 @@
         </script>
     }
     <div class="container">
-        <form action="/Home/UserSettings" method="post">
-            <table class="table-condensed">
-                <tr>
-                    <th class="text-center">学号</th>
-                    <td><input type="text" name="StudentID" value="@Model.StudentID" readonly="readonly" /></td>
-                </tr>
-                <tr>
-                    <th class="text-center">用户名</th>
-                    <td><input type="text" name="StudentName" value="@Model.StudentName" readonly="readonly" /></td>
-                </tr>
-                <tr id="password">
-                    <th class="text-center">密码</th>
-                    <td><input type="text" name="Password" value="@Model.Password" /></td>
-                </tr>
-                <tr>
-                    <th class="text-center">班级</th>
-                    <td><input type="text" name="ClassID" value="@Model.ClassID" /></td>
-                </tr>
-                <tr>
-                    <th class="text-center">性别</th>
-                    <td>
-                        <label><input type="radio" name="Gender" id="Gender1" value="1" />男 </label>
-                        <label><input type="radio" name="Gender" id="Gender2" value="0" />女 </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="text-center">年级</th>
-                    <td>
-                        <select name="Grade" id="Grade">
-                            <option value="1">大一</option>
-                            <option value="2">大二</option>
-                            <option value="3">大三</option>
-                            <option value="4">大四</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="text-center">电话号码</th>
-                    <td><input type="text" name="Phonenumber" value="@Model.Phonenumber" /></td>
-                </tr>
-                <tr>
-                    <th class="text-center">邮箱</th>
-                    <td><input type="text" name="Email" value="@Model.Email" /></td>
-                </tr>
-                <tr>
-                    <th><input type="text" name="CertainTeam" value="@Model.CertainTeam" hidden="hidden" /></th>
-                    <td><button class="btn btn-default">确认更改</button>  <p class="btn btn-default" id="modify" >修改密码</p></td>
-                </tr>
-            </table>
-        </form>
+        <div class="page">
+            <br />
+            <form action="/Home/UserSettings" method="post" style="margin-left: 20px;">
+                <table class="table-condensed">
+                    <tr>
+                        <th class="text-center">学号</th>
+                        <td><input type="text" name="StudentID" value="@Model.StudentID" readonly="readonly" /></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">用户名</th>
+                        <td><input type="text" name="StudentName" value="@Model.StudentName" readonly="readonly" /></td>
+                    </tr>
+                    <tr id="password">
+                        <th class="text-center">密码</th>
+                        <td><input type="text" name="Password" id="Password" value="@Model.Password" /></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">班级</th>
+                        <td><input type="text" name="ClassID" value="@Model.ClassID" /></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">性别</th>
+                        <td>
+                            <label><input type="radio" name="Gender" id="Gender1" value="1" />男 </label>
+                            <label><input type="radio" name="Gender" id="Gender2" value="0" />女 </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">年级</th>
+                        <td>
+                            <select name="Grade" id="Grade">
+                                <option value="1">大一</option>
+                                <option value="2">大二</option>
+                                <option value="3">大三</option>
+                                <option value="4">大四</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">电话号码</th>
+                        <td><input type="text" name="Phonenumber" value="@Model.Phonenumber" /></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">邮箱</th>
+                        <td><input type="text" name="Email" value="@Model.Email" /></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text" name="CertainTeam" value="@Model.CertainTeam" hidden="hidden" /></th>
+                        <td>
+                            <button class="btn btn-default">确认更改</button>
+                            @if (Model.StudentID == User.Identity.Name)
+                            {
+                                <p class="btn btn-default" id="modify">修改密码</p>
+                            }
+                            else
+                            {
+                                <button class="btn btn-default" id="reset">重置密码</button>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <br />
+            @if (Model.StudentID == User.Identity.Name)
+            {
+                <form action="/Home/UploadImage" method="post" enctype="multipart/form-data" class="form-inline" style="margin-left: 20px;">
+                    <div class="form-group">
+                        <label>背景图片</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="file" />
+                    </div>
+                    <button class="btn btn-default">上传</button>
+                    <div class="form-group">
+                        <label style="font-size:medium;font-weight:100;">上传之后可能要一些时间重新加载，请耐心等待</label>
+                    </div>
+                </form>
+                <br />
+            }
+        </div>
     </div>
     <script>
             $(function () {
                 $("#password").hide();
                 $("#modify").click(function () {
                     $("#password").slideDown("slow");
+                });
+                $("#reset").click(function () {
+                    if (confirm("当前用户的密码将会重置为“123456”（不含引号）,确认重置吗？")) {
+                        $("#Password").attr("value", "123456");
+                    }
                 });
             });
     </script>

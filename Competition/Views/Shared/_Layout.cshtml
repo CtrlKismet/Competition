@@ -1,7 +1,8 @@
 ﻿@using Competition.ViewModels
 
-@{ 
+@{
     string title = ViewBag.Title + " | 比赛报名系统";
+    string imagesource = "/background/"+User.Identity.Name+".jpg";
 }
 
 <!DOCTYPE html>
@@ -9,19 +10,44 @@
 <head>
     <meta charset="utf-8" />
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-    <link rel="icon" href="/MyIcon/science.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/MyIcon/science.ico" type="image/x-icon" /> 
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    
+
     <title>@title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <style>
+        body {
+            /*background-image: url(/background/16061313.jpg);*/
+            background-attachment: fixed;
+            background-size:100% 100%;
+        }
+
+        .page {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #000000;
+            border-radius: 4px;
+        }
+
+        .table {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #000000;
+        }
+
+        .table-bordered {
+            border-collapse:separate;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body>
+<body style="background-image:url(@imagesource);">
     <script>
-        function delete_confirm()
-        {
+        function delete_confirm() {
             return confirm("确定要删除吗？");
         }
     </script>
@@ -102,7 +128,7 @@
         <!--<hr />-->
         <br />
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="color:darkgray;">
         <p>Created By <a href="mailto:2464676281@qq.com">Ctrlkismet</a>.  Powered By <a href="http://getbootstrap.com/2.3.2/" target="_blank">Bootstrap</a>.</p>
         <p>Currect Time is : @System.DateTime.Now</p>
     </div>

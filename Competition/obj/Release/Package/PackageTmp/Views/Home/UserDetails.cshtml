@@ -52,14 +52,6 @@
                     <td>@gender</td>
                 </tr>
                 <tr>
-                    <th style="width: 5em;">邮箱</th>
-                    <td>@Model.Email</td>
-                </tr>
-                <tr>
-                    <th style="width: 5em;">手机号</th>
-                    <td>@Model.Phonenumber</td>
-                </tr>
-                <tr>
                     <th style="width: 5em;">设置</th>
                     <td>
                         @{
@@ -139,9 +131,9 @@
                         int i = teams.IndexOf(t);
                         <tr>
                             <td><a href="/Home/ViewCompetition?ID=@Competitions[i].CompetitionID">@Competitions[i].CompetitionName</a></td>
-                            <td>@Competitions[i].StartTime.ToString("D")</td>
+                            <td>@Competitions[i].StartTime.ToString("d")</td>
                             <td>@teamMember[i]</td>
-                            @if (Model.StudentID == User.Identity.Name && teamLeader[i] == User.Identity.Name)
+                            @if ((Model.StudentID == User.Identity.Name && teamLeader[i] == User.Identity.Name)||flag)
                             {
                                 <td><a href="/Manage/DeleteTeam?ID=@teams[i].ID" onclick="return delete_confirm();"><span class="glyphicon glyphicon-trash"></span>  删除队伍</a></td>
                             }

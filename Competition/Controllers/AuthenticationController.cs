@@ -32,7 +32,7 @@ namespace Competition.Controllers
             }
             else
             {
-                ModelState.AddModelError("CredentialError", "Invalid Username or Password");
+                ModelState.AddModelError("CredentialError", "学号或密码错误");
                 return View("Login");
             }
         }

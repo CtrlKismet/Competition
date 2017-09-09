@@ -46,7 +46,7 @@ namespace Competition.Controllers
             competition c = msgBal.GetCompetitionByID(tmp.number);
 
             //已经超过报名截止时间
-            if (System.DateTime.Now.Date > c.EndTime.Date)
+            if (DateTime.Now.Date > c.EndTime.Date)
             {
                 tmp.ErrorMsg = "已经超过报名时间！";
                 return View("ErrorRegister", tmp);
@@ -155,10 +155,7 @@ namespace Competition.Controllers
             {
                 MsgBusinessLayer msgBal = new MsgBusinessLayer();
                 student s = msgBal.GetStudentByID(User.Identity.Name);
-                if (s.HasPermission != 0)
-                {
-                    msgBal.DeleteTeam(ID.Value);
-                }
+                msgBal.DeleteTeam(ID.Value,s);
             }
             return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
         }
@@ -185,7 +182,7 @@ namespace Competition.Controllers
                 {
                     if(t.CID==ID)
                     {
-                        msgBal.DeleteTeam(t.ID);
+                        msgBal.DeleteTeam(t.ID, new student() { HasPermission = 100 });
                     }
                 }
                 msgBal.DeleteCompetition(ID.Value);
@@ -297,6 +294,7 @@ namespace Competition.Controllers
             HSSFWorkbook book = new HSSFWorkbook();
             //添加一个sheet
             ISheet sheet1 = book.CreateSheet("Sheet1");
+            int count = 1;
 
             //表格设计
             ICellStyle style = book.CreateCellStyle();
@@ -404,7 +402,7 @@ namespace Competition.Controllers
                 rowTemplate = sheet1.GetRow(i); 
                 cell = rowTemplate.CreateCell(0);
                 cell.CellStyle = cellStyle;
-                cell.SetCellValue(Team.ID);
+                cell.SetCellValue(count);count++;
 
                 if(i+j-1!=i)
                 {

@@ -13,16 +13,20 @@
     <title>Register</title>
 </head>
 <body>
-    <h2>队伍成员：</h2>
-    <form action="/Manage/Register" method="post">
-        <input type="hidden" name="number" value="@Model.CompetitionID" />
-        <br /><input type="text" name="member" placeholder="学号" required/><br />
-        @for (int i = 1; i < Model.TeamLimit; i++)
-        {
-            <br /><input type="text" name="member"  placeholder="学号"/><br />
-        }
-        <br /><button type="submit">提交队伍信息</button>
-        <div>注意：第一个人即为队长</div>
-    </form>
+    <div class="page">
+        <br />
+        <h2 style="margin-left:20px;">队伍成员：</h2>
+        <form action="/Manage/Register" method="post" style="margin-left:20px;">
+            <input type="hidden" name="number" value="@Model.CompetitionID" />
+            <br /><input type="text" name="member" placeholder="学号" required /><br />
+            @for (int i = 1; i < Model.TeamLimit; i++)
+            {
+                <br /><input type="text" name="member" placeholder="学号" /><br />
+            }
+            <br /><button type="submit">提交队伍信息</button>
+            <div>注意：第一个人即为队长</div>
+        </form>
+        <br />
+    </div>
 </body>
 </html>

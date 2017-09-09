@@ -32,7 +32,8 @@
             }
         });
     </script>
-    <form action="/Manage/Edit" method="post" class="form-horizontal" role="form">
+    <form action="/Manage/Edit" method="post" class="form-horizontal page" role="form">
+        <br />
         <input type="text" name="CompetitionID" value="@Model.CompetitionID" hidden="hidden" />
         <div class="form-group">
             <label class="col-md-2 control-label" style="font-size:large;">比赛名称</label>
@@ -73,6 +74,7 @@
             <label class="col-md-2 control-label" style="font-size:large;"></label>
             <div class="col-md-10"><button class="btn btn-default btn-group-lg">确认修改</button></div>
         </div>
+        <br />
     </form>
 </body>
 </html>

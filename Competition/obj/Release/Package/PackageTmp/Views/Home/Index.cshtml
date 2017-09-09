@@ -14,11 +14,10 @@
     <title>Home</title>
 </head>
 <body>
-    <div style="font-size:medium;font-weight:bold;">
-        所有比赛&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div style="font-size:xx-large;font-weight:bold;">
         @if (Model.HasPermission)
         {
-            <a href="/Manage/Add" class="btn btn-default btn-sm">
+            <a href="/Manage/Add" class="btn btn-default btn-lg" target="_blank">
                     <span class="glyphicon glyphicon-plus"></span> 新建比赛
             </a>
         }
@@ -26,15 +25,21 @@
     <br />
     @if (Model.Competitions.Count != 0)
     {
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
-                    <th>比赛编号</th>
+                    <th width="6%;">比赛编号</th>
                     <th>比赛名称</th>
                     <th>比赛开始日期</th>
                     <th>报名截止日期</th>
                     <th>参赛年级</th>
-                    <th>管理</th>
+                    <th width="4%;">报名</th>
+                    @if (Model.HasPermission)
+                    {
+                        <th width="4%;">编辑</th>
+                        <th width="4%;">删除</th>
+                    }
+                    <th width="6%;">查看队伍</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,25 +77,17 @@
                     <tr>
                         <td>@c.CompetitionID</td>
                         <td><a href="/Home/ViewCompetition?ID=@c.CompetitionID">@c.CompetitionName</a></td>
-                        <td>@c.StartTime.ToString("D")</td>
-                        <td>@c.EndTime.ToString("D")</td>
+                        <td>@c.StartTime.ToString("d")</td>
+                        <td>@c.EndTime.ToString("d")</td>
                         <td>@group</td>
+                        <td><a href="/Manage/Register?ID=@c.CompetitionID"><span class="glyphicon glyphicon-plus-sign"></span></a></td>
                         @if (Model.HasPermission)
                         {
-                            <td>
-                                <a href="/Manage/Register?ID=@c.CompetitionID">报名</a> |
-                                <a href="/Manage/ViewTeams?ID=@c.CompetitionID">查看队伍</a> |
-                                <a href="/Manage/Edit?ID=@c.CompetitionID">编辑</a> |
-                                <a href="/Manage/Delete?ID=@c.CompetitionID" onclick="return delete_confirm();">删除</a>
+                            <td><a href="/Manage/Edit?ID=@c.CompetitionID"><span class="glyphicon glyphicon-edit"></span></a></td>
+                            <td><a href="/Manage/Delete?ID=@c.CompetitionID" onclick="return delete_confirm();"><span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         }
-                        else
-                        {
-                            <td>
-                                <a href="/Manage/Register?ID=@c.CompetitionID">报名</a> |
-                                <a href="/Manage/ViewTeams?ID=@c.CompetitionID">查看队伍</a>
-                            </td>
-                        }
+                        <td><a href="/Manage/ViewTeams?ID=@c.CompetitionID"><span class="glyphicon glyphicon-search"></span></a></td>
                     </tr>
                 }
             </tbody>

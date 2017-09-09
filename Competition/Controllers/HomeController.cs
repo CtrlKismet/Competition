@@ -1,6 +1,7 @@
 ﻿using Competition.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -48,14 +49,14 @@ namespace Competition.Controllers
             List<student> s1 = new List<student>();
             foreach (student templateStudent in s)
             {
-                if (templateStudent.StudentID.ToLower().Contains(keyword.ToLower()) ||templateStudent.StudentName.ToLower().Contains(keyword.ToLower()))
+                if (templateStudent.StudentID.ToLower().Contains(keyword.ToLower()) || templateStudent.StudentName.ToLower().Contains(keyword.ToLower()))
                 {
                     s1.Add(templateStudent);
                 }
             }
             TemplateStudents t = new TemplateStudents();
             t.tittle = "用户 \"" + keyword + "\" 搜索结果"; t.students = s1;
-            return View("ShowUsers",t);
+            return View("ShowUsers", t);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Competition.Controllers
             }
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
-            if(s==null)
+            if (s == null)
             {
                 return View("Home");
             }
@@ -101,6 +102,43 @@ namespace Competition.Controllers
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
             if (msgBal.RefreshStudent(s)) return RedirectToAction("UserDetails", new { ID = s.StudentID });
             return View(s);
+        }
+
+        /// <summary>
+        /// 上传图片至服务器
+        /// </summary>
+        /// <param name="file">图片文件</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        public ActionResult UploadImage(HttpPostedFileBase file)
+        {
+
+            if (file == null || file.ContentLength == 0) return RedirectToAction("Index");
+            string fileType = "", fileSuffix = "";
+            bool flag = false;
+            foreach (char s in file.ContentType)
+            {
+                if(s=='/')
+                {
+                    flag = true;
+                    continue;
+                }
+                if (flag) fileSuffix += s;
+                else fileType += s;
+            }
+            /*
+             * 文件格式错误
+            if (fileType != "image") return RedirectToAction("Error", "文件格式错误");
+            */
+            //string newFilePath = @"F:\Program\Competition\Competition\background\";//save path   
+            string newFilePath = @"C:\web\Competition\background\";//save to cloud
+
+            /*
+             * 只支持.jpg后缀的图片
+             */
+            file.SaveAs(newFilePath +User.Identity.Name+".jpg");//save file
+            return RedirectToAction("Index");
         }
 
         /// <summary>

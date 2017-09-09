@@ -180,6 +180,7 @@ namespace Competition.ViewModels
                 }
                 c1.TeamLimit = c.TeamLimit;
                 msgEts.SaveChanges();
+                CheckTeam(c1.CompetitionID);
                 return true;
             }
             return false;
@@ -255,8 +256,9 @@ namespace Competition.ViewModels
         /// 删除队伍
         /// </summary>
         /// <param name="ID">被删除队伍的ID</param>
+        /// <param name="s1">操作的学生</param>
         /// <returns></returns>
-        public bool DeleteTeam(int ID)
+        public bool DeleteTeam(int ID,student s1)
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             team t = msgEts.team.FirstOrDefault(x => x.ID == ID);
@@ -265,9 +267,17 @@ namespace Competition.ViewModels
             //修改队伍里成员的CertainTeam
             List<string> teamMember = GetMessage(t.Member);
 
+            bool first = true;
+
             foreach (string m in teamMember)
             {
                 student s = GetStudentByID(m);
+
+                if (first)
+                {
+                    if (s1.StudentID != s.StudentID&&s1.HasPermission!=100) return false;
+                    first = false;
+                }
 
                 List<string> studentTeam = GetMessage(s.CertainTeam);
                 string newCertainTeam = "";
@@ -287,6 +297,35 @@ namespace Competition.ViewModels
             msgEts.team.Remove(t);
             msgEts.SaveChanges();
             return true;
+        }
+
+        /// <summary>
+        /// 检查队伍是否符合队伍信息
+        /// </summary>
+        /// <param name="CID"></param>
+        public void CheckTeam(int CID)
+        {
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            List<team> allTeams = msgEts.team.ToList();
+            competition c = GetCompetitionByID(CID);
+            foreach (team t in allTeams)
+            {
+                if (t.CID==CID)
+                {
+                    int templateGroup = c.Groups;
+                    if (t.Group % 10 > templateGroup % 10) DeleteTeam(t.ID, new student { HasPermission = 100 });
+                    t.Group /= 10; templateGroup /= 10;
+                    
+                    if (t.Group % 10 > templateGroup % 10) DeleteTeam(t.ID, new student { HasPermission = 100 });
+                    t.Group /= 10; templateGroup /= 10;
+
+                    if (t.Group % 10 > templateGroup % 10) DeleteTeam(t.ID, new student { HasPermission = 100 });
+                    t.Group /= 10; templateGroup /= 10;
+
+                    if (t.Group % 10 > templateGroup % 10) DeleteTeam(t.ID, new student { HasPermission = 100 });
+                    t.Group /= 10; templateGroup /= 10;
+                }
+            }
         }
 
         #endregion
