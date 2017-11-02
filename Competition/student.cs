@@ -25,5 +25,6 @@ namespace Competition
         public int ID { get; set; }
         public Nullable<sbyte> HasPermission { get; set; }
         public string CertainTeam { get; set; }
+        public string RealName { get; set; }
     }
 }

@@ -85,6 +85,13 @@ namespace Competition.Controllers
         [Authorize]
         public ActionResult UserSettings(string ID)
         {
+            //判断是否有权限
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            if (msgBal.GetStudentByID(User.Identity.Name).HasPermission == 0&&User.Identity.Name!=msgBal.GetStudentByID(ID).StudentID)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
             return View(s);
@@ -113,13 +120,13 @@ namespace Competition.Controllers
         [HttpPost]
         public ActionResult UploadImage(HttpPostedFileBase file)
         {
-
-            if (file == null || file.ContentLength == 0) return RedirectToAction("Index");
+            //图片大小<=2MB=2097152Byte
+            if (file == null || file.ContentLength == 0 || file.ContentLength >= 2097152) return View("~/Views/Shared/Error.cshtml", new ErrorMessage { Url = "/Home/UserSettings?ID="+User.Identity.Name, ErrorMsg = "未上传图片或者图片超过2MB！" });
             string fileType = "", fileSuffix = "";
             bool flag = false;
             foreach (char s in file.ContentType)
             {
-                if(s=='/')
+                if (s == '/')
                 {
                     flag = true;
                     continue;
@@ -127,17 +134,20 @@ namespace Competition.Controllers
                 if (flag) fileSuffix += s;
                 else fileType += s;
             }
-            /*
-             * 文件格式错误
-            if (fileType != "image") return RedirectToAction("Error", "文件格式错误");
-            */
-            //string newFilePath = @"F:\Program\Competition\Competition\background\";//save path   
+            //文件格式错误
+            if (fileType != "image") return View("~/Views/Shared/Error.cshtml", new ErrorMessage { Url="/Home/Index",ErrorMsg="文件格式错误！"});
+            
+            //string newFilePath = @"F:\Program\Competition\Competition\background\";//save path  
             string newFilePath = @"C:\web\Competition\background\";//save to cloud
 
-            /*
-             * 只支持.jpg后缀的图片
-             */
-            file.SaveAs(newFilePath +User.Identity.Name+".jpg");//save file
+            //删除原有的图片
+            string tmp = Directory.EnumerateFiles(newFilePath, $"{User.Identity.Name}.*").First();
+            System.IO.File.Delete(tmp);
+
+            //保存新的图片
+            ViewBag.imagesource = newFilePath + User.Identity.Name + "." + fileSuffix;
+            file.SaveAs(ViewBag.imagesource);//save file
+            
             return RedirectToAction("Index");
         }
 
@@ -160,5 +170,14 @@ namespace Competition.Controllers
     {
         public string tittle { get; set; }
         public List<student> students { get; set; }
+    }
+}
+
+namespace Competition
+{
+    public class ErrorMessage
+    {
+        public string Url { get; set; }
+        public string ErrorMsg { get; set; }
     }
 }

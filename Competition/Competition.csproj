@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -286,10 +287,10 @@
     <Content Include="Views\Manage\Add.cshtml" />
     <Content Include="Views\Manage\Edit.cshtml" />
     <Content Include="Views\Manage\Register.cshtml" />
-    <Content Include="Views\Manage\ErrorRegister.cshtml" />
     <Content Include="Views\Home\UserDetails.cshtml" />
     <Content Include="Views\Home\ShowUsers.cshtml" />
     <Content Include="Views\Manage\ViewTeams.cshtml" />
+    <Content Include="Views\Manage\ModifyPwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

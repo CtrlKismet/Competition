@@ -5,28 +5,22 @@
     ViewBag.title = Model.CompetitionName + " | 报名";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Register</title>
-</head>
-<body>
-    <div class="page">
-        <br />
-        <h2 style="margin-left:20px;">队伍成员：</h2>
-        <form action="/Manage/Register" method="post" style="margin-left:20px;">
-            <input type="hidden" name="number" value="@Model.CompetitionID" />
-            <br /><input type="text" name="member" placeholder="学号" required /><br />
-            @for (int i = 1; i < Model.TeamLimit; i++)
-            {
-                <br /><input type="text" name="member" placeholder="学号" /><br />
-            }
-            <br /><button type="submit">提交队伍信息</button>
-            <div>注意：第一个人即为队长</div>
-        </form>
-        <br />
-    </div>
-</body>
-</html>
+<div class="page">
+    <h3>请填写队伍成员学号</h3>
+    <form action="/Manage/Register" method="post">
+        <input type="hidden" name="number" value="@Model.CompetitionID" />
+        <div class="form-group">
+            <input type="number" class="form-control" name="member" placeholder="学号" required />
+        </div>
+        @for (int i = 1; i < Model.TeamLimit; i++)
+        {
+            <div class="form-group">
+                <input type="number" class="form-control" name="member" placeholder="学号" />
+            </div>
+        }
+        <div class="form-group">
+            <button class="btn btn-default" type="submit">提交队伍信息</button>
+        </div>
+        <div class="alert alert-info">注意：第一个人为队长</div>
+    </form>
+</div>

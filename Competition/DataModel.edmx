@@ -17,6 +17,7 @@
           <Property Name="StartTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="Awards" Type="longtext" />
+          <Property Name="DeleteTime" Type="datetime" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="student">
           <Key>
@@ -33,12 +34,13 @@
           <Property Name="Email" Type="longtext" />
           <Property Name="Phonenumber" Type="longtext" />
           <Property Name="CertainTeam" Type="longtext" />
+          <Property Name="RealName" Type="longtext" />
         </EntityType>
         <EntityType Name="team">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CID" Type="int" Nullable="false" />
           <Property Name="Group" Type="int" Nullable="false" />
           <Property Name="Number" Type="int" Nullable="false" />
@@ -66,6 +68,7 @@
           <Property Name="Groups" Type="Int32" Nullable="false" />
           <Property Name="TeamLimit" Type="Int32" Nullable="false" />
           <Property Name="Awards" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteTime" Type="DateTime" Nullable="false" />
         </EntityType>
         <EntityType Name="student">
           <Key>
@@ -82,6 +85,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HasPermission" Type="SByte" />
           <Property Name="CertainTeam" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="RealName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="totalmsgdbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="competition" EntityType="Self.competition" />
@@ -108,6 +112,7 @@
           <EntitySetMapping Name="competition">
             <EntityTypeMapping TypeName="totalmsgdbModel.competition">
               <MappingFragment StoreEntitySet="competition">
+                <ScalarProperty Name="DeleteTime" ColumnName="DeleteTime" />
                 <ScalarProperty Name="Awards" ColumnName="Awards" />
                 <ScalarProperty Name="TeamLimit" ColumnName="TeamLimit" />
                 <ScalarProperty Name="Groups" ColumnName="Groups" />
@@ -122,6 +127,7 @@
           <EntitySetMapping Name="student">
             <EntityTypeMapping TypeName="totalmsgdbModel.student">
               <MappingFragment StoreEntitySet="student">
+                <ScalarProperty Name="RealName" ColumnName="RealName" />
                 <ScalarProperty Name="CertainTeam" ColumnName="CertainTeam" />
                 <ScalarProperty Name="HasPermission" ColumnName="HasPermission" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

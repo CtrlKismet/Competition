@@ -20,7 +20,7 @@ namespace Competition.ViewModels
         {
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
             student s = msgEts.student.FirstOrDefault(m => m.StudentID == ID);
-            return s;
+            return s==null?new student { HasPermission=0}:s;
         }
 
         /// <summary>
@@ -65,10 +65,31 @@ namespace Competition.ViewModels
                 s1.Grade = s.Grade;
                 s1.ClassID = s.ClassID;
                 s1.CertainTeam = s.CertainTeam;
-                s1.Password = s.Password;
+                s1.RealName = s.RealName;
+                if (s.Password != null) s1.Password = s.Password;
+                if (s.HasPermission != null) s1.HasPermission = s.HasPermission;
                 /*
                  * Other Propertities is not posted to this function
                 */
+                msgEts.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public bool ModifyStudentPassword(student s)
+        {
+            //s.Email里存放的是旧的用户密码
+            totalmsgdbEntities msgEts = new totalmsgdbEntities();
+            student s1 = msgEts.student.FirstOrDefault(m => m.StudentID == s.StudentID);
+            if (s1 != null&&s.Email==s1.Password)
+            {
+                s1.Password = s.Password;
                 msgEts.SaveChanges();
                 return true;
             }
@@ -167,6 +188,7 @@ namespace Competition.ViewModels
                 c1.Details = c.Details;
                 c1.StartTime = c.StartTime;
                 c1.EndTime = c.EndTime;
+                c1.DeleteTime = c.DeleteTime;
                 c1.Groups = 0;
                 foreach (int group in c.grade)
                 {
@@ -385,12 +407,4 @@ namespace Competition.ViewModels
 
     }
 
-}
-
-namespace Competition
-{
-    public class Global
-    {
-        public const int MAX_LENGTH = 20;
-    }
 }

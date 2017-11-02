@@ -12,6 +12,7 @@
     <Property Name="Groups" Type="Int32" Nullable="false" />
     <Property Name="TeamLimit" Type="Int32" Nullable="false" />
     <Property Name="Awards" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="DeleteTime" Type="DateTime" Nullable="false" />
   </EntityType>
   <EntityType Name="student">
     <Key>
@@ -28,6 +29,7 @@
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="HasPermission" Type="SByte" />
     <Property Name="CertainTeam" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="RealName" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityContainer Name="totalmsgdbEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="competition" EntityType="Self.competition" />

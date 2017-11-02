@@ -1,4 +1,9 @@
-﻿body {
+﻿html,
+body {
+    height: 100%;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -17,8 +22,110 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+
+body {
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
+
+/*半透明背景*/
+.page {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #000000;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.table {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #000000;
+}
+
+.table-bordered {
+    border-collapse: separate;
+    border-radius: 4px;
+}
+
+/* 主页 */
+.container {
+    width: unset !important;
+    font-size: 16px !important;
+    max-width: 1200px;
+    padding: 0;
+    margin: auto;
+    overflow: auto;
+}
+
+/*导航栏*/
+.navbar > .container {
+    overflow: visible;
+    padding: 0 16px;
+}
+
+ul.dropdown-menu > li.container {
+    max-width: 300px;
+}
+
+/*主要页面容器*/
+.main {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+/*主页比赛列表表格*/
+tr,
+td {
+    white-space: nowrap;
+}
+
+/* 主页添加比赛按钮 */
+.admin-action {
+    margin-bottom: 12px;
+}
+
+/*比赛详情页面*/
+.page h2,
+.page .match-detail {
+    margin: 10px 0;
+}
+
+/*比赛详情页面的时间表格*/
+.panel-table-wrapper {
+    overflow: auto;
+}
+
+/*登录*/
+.login-form {
+    margin-bottom: 16px;
+}
+
+    .login-form input {
+        max-width: 280px;
+    }
+
+/*新建比赛页面*/
+.form-horizontal .form-group {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+/*用户设置页面 包含 注册 和 用户信息*/
+.userinfo-form {
+    margin-bottom: 25px;
+}
+
+    .userinfo-form input,
+    .userinfo-form select {
+        width: 280px;
+        display: inline-block;
+    }
+
+    .userinfo-form .help-block {
+        display: inline-block;
+        margin-bottom: 0;
+    }
+    .userinfo-form .help-block ul {
+        margin: 0;
+    }

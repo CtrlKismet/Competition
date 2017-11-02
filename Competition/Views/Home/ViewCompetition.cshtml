@@ -34,34 +34,43 @@
     }
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@Model.CompetitionName</title>
-</head>
-<body>
     <div class="page">
-        <div style="margin-left:20px;">
+        <div>
             <h2>@Model.CompetitionName</h2>
-            <h3>
-                @Model.Details
-            </h3>
-            <div>每支队伍限人数 @Model.TeamLimit 人及以下。</div>
-            <div>仅限 @group 的同学参加。</div>
-            <div>
-                比赛开始时间 : @Model.StartTime
+            <div class="match-detail">
+                @Html.Raw(Model.Details)
+            </div>
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">注意事项</h3>
+                </div>
+                <div class="panel-body">
+                    <p>每支队伍限人数 @Model.TeamLimit 人及以下。</p>
+                    <p>限 @group 的同学参加。</p>
+                </div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>报名截止时间</td>
+                            <td>@Model.EndTime.ToString("d")</td>
+                        </tr>
+                        <tr>
+                            <td>比赛开始时间</td>
+                            <td>@Model.StartTime.ToString("d")</td>
+                        </tr>
+                        <tr>
+                            <td>比赛结束时间</td>
+                            <td>@Model.DeleteTime.ToString("d")</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div>
-                报名截止时间 : @Model.EndTime
+                <button class="btn btn-primary" type="button" onclick="location.href='/Manage/Register?ID=@Model.CompetitionID'">报名</button>
+                <button class="btn  btn-default" type="button" onclick="location.href='/Manage/ViewTeams?ID=@Model.CompetitionID'">查看队伍</button>
+                <!--<a href="/Manage/ViewTeams?ID=@Model.CompetitionID">下载附件</a>-->
             </div>
-            <div>
-                <a href="/Manage/Register?ID=@Model.CompetitionID">报名</a> |
-                <a href="/Manage/ViewTeams?ID=@Model.CompetitionID">查看队伍</a>
-            </div>
-            <br />
         </div>
     </div>
-</body>
-</html>
+

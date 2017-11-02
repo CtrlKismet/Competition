@@ -22,5 +22,6 @@ namespace Competition
         public int Groups { get; set; }
         public int TeamLimit { get; set; }
         public string Awards { get; set; }
+        public System.DateTime DeleteTime { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     <EntitySetMapping Name="competition">
       <EntityTypeMapping TypeName="totalmsgdbModel.competition">
         <MappingFragment StoreEntitySet="competition">
+          <ScalarProperty Name="DeleteTime" ColumnName="DeleteTime" />
           <ScalarProperty Name="Awards" ColumnName="Awards" />
           <ScalarProperty Name="TeamLimit" ColumnName="TeamLimit" />
           <ScalarProperty Name="Groups" ColumnName="Groups" />
@@ -18,6 +19,7 @@
     <EntitySetMapping Name="student">
       <EntityTypeMapping TypeName="totalmsgdbModel.student">
         <MappingFragment StoreEntitySet="student">
+          <ScalarProperty Name="RealName" ColumnName="RealName" />
           <ScalarProperty Name="CertainTeam" ColumnName="CertainTeam" />
           <ScalarProperty Name="HasPermission" ColumnName="HasPermission" />
           <ScalarProperty Name="ID" ColumnName="ID" />

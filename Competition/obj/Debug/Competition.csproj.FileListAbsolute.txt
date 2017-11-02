@@ -103,3 +103,4 @@ F:\Program\Competition\Competition\bin\NPOI.OOXML.dll
 F:\Program\Competition\Competition\bin\NPOI.OpenXml4Net.dll
 F:\Program\Competition\Competition\bin\NPOI.OpenXmlFormats.dll
 F:\Program\Competition\Competition\bin\NPOI.xml
+F:\Program\Competition\Competition\obj\Debug\Competition.csproj.CoreCompileInputs.cache

@@ -13,6 +13,10 @@ namespace Competition.Controllers
         // GET: Authentication
         public ActionResult Login()
         {
+            if(User.Identity.Name!=null&&User.Identity.Name!="")
+            {
+                return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "您已成功登录！", Url = "/Home/Index" });
+            }
             return View();
         }
 
@@ -53,7 +57,9 @@ namespace Competition.Controllers
             }
             else
             {
-                return RedirectToAction("Login", "Authentication");
+                ModelState.AddModelError("CredentialError", "学号或密码错误");
+                return View("Login");
+                //return RedirectToAction("Login", "Authentication");
             }
         }
 

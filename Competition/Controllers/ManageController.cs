@@ -44,12 +44,12 @@ namespace Competition.Controllers
         {
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
             competition c = msgBal.GetCompetitionByID(tmp.number);
+            string url = "/Manage/Register?ID=" + tmp.number.ToString();
 
             //已经超过报名截止时间
             if (DateTime.Now.Date > c.EndTime.Date)
             {
-                tmp.ErrorMsg = "已经超过报名时间！";
-                return View("ErrorRegister", tmp);
+                return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "已经超过报名时间！", Url = url });
             }
 
             team t = new team();
@@ -66,21 +66,18 @@ namespace Competition.Controllers
                 student s = msgBal.GetStudentByID(m);
                 if (s == null)
                 {
-                    tmp.ErrorMsg = "用户 \"" + m + "\" 不存在！";
-                    return View("ErrorRegister", tmp);
+                    return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "用户 \"" + m + "\" 不存在！", Url = url });
                 }
 
                 string errorMsg = msgBal.CanRegisterToCompetition(s, c);
                 if (errorMsg != null)
                 {
-                    tmp.ErrorMsg = "用户 \"" + m + "\" " + errorMsg;
-                    return View("ErrorRegister", tmp);
+                    return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "用户 \"" + m + "\" " + errorMsg, Url = url });
                 }
 
                 if (templateStudents.FirstOrDefault(x => x.StudentID == s.StudentID) != null)
                 {
-                    tmp.ErrorMsg = "用户 \"" + m + "\" 重复填写！";
-                    return View("ErrorRegister", tmp);
+                    return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "用户 \"" + m + "\" 重复填写！", Url = url });
                 }
                 templateStudents.Add(s);
                 if (!vis[s.Grade])
@@ -102,8 +99,7 @@ namespace Competition.Controllers
 
             if (t.Number > c.TeamLimit)
             {
-                tmp.ErrorMsg = "参赛人数超过限制！";
-                return View("ErrorRegister", tmp);
+                return View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "参赛人数超过限制！", Url = url });
             }
 
             //保存队伍
@@ -155,7 +151,7 @@ namespace Competition.Controllers
             {
                 MsgBusinessLayer msgBal = new MsgBusinessLayer();
                 student s = msgBal.GetStudentByID(User.Identity.Name);
-                msgBal.DeleteTeam(ID.Value,s);
+                msgBal.DeleteTeam(ID.Value, s);
             }
             return RedirectToAction("UserDetails", "Home", new { ID = User.Identity.Name });
         }
@@ -180,7 +176,7 @@ namespace Competition.Controllers
                 totalmsgdbEntities msgEts = new totalmsgdbEntities();
                 foreach (team t in msgEts.team.ToList())
                 {
-                    if(t.CID==ID)
+                    if (t.CID == ID)
                     {
                         msgBal.DeleteTeam(t.ID, new student() { HasPermission = 100 });
                     }
@@ -200,11 +196,14 @@ namespace Competition.Controllers
         {
             if (!ID.HasValue) return RedirectToAction("Index", "Home");
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
+
+            //判断是否有权限
             student s = msgBal.GetStudentByID(User.Identity.Name);
             if (s.HasPermission == 0)
             {
                 return RedirectToAction("Index", "Home");
             }
+
             competition c = msgBal.GetCompetitionByID(ID.Value);
             return View(c);
         }
@@ -216,6 +215,7 @@ namespace Competition.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(TemplateCompetition c)
         {
             MsgBusinessLayer msgBal = new MsgBusinessLayer();
@@ -245,6 +245,7 @@ namespace Competition.Controllers
         /// <param name="c"></param>
         /// <returns></returns>
         [Authorize]
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Add(TemplateCompetition c)
         {
@@ -255,6 +256,7 @@ namespace Competition.Controllers
             c1.StartTime = c.StartTime;
             c1.EndTime = c.EndTime;
             c1.TeamLimit = c.TeamLimit;
+            c1.DeleteTime = c.DeleteTime;
             c1.Groups = 0;
             foreach (int group in c.grade)
             {
@@ -277,9 +279,15 @@ namespace Competition.Controllers
         /// <returns></returns>
         public FileResult Excel(int ID)
         {
+            //判断是否有权限
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            if (msgBal.GetStudentByID(User.Identity.Name).HasPermission == 0)
+            {
+                return null;
+            }
+
             //获取list数据
             totalmsgdbEntities msgEts = new totalmsgdbEntities();
-            MsgBusinessLayer msgBal = new MsgBusinessLayer();
             List<team> t = msgEts.team.ToList();
             List<team> t1 = new List<team>();
             foreach (team Team in t)
@@ -383,7 +391,7 @@ namespace Competition.Controllers
 
                     cell = rowTemplate.CreateCell(1);
                     cell.CellStyle = cellStyle;
-                    cell.SetCellValue(s.StudentName);
+                    cell.SetCellValue(s.RealName);
 
                     cell = rowTemplate.CreateCell(2);
                     cell.CellStyle = cellStyle;
@@ -399,14 +407,14 @@ namespace Competition.Controllers
                 }
                 sheet1.AddMergedRegion(new CellRangeAddress(i, i + j - 1, 0, 0));
 
-                rowTemplate = sheet1.GetRow(i); 
+                rowTemplate = sheet1.GetRow(i);
                 cell = rowTemplate.CreateCell(0);
                 cell.CellStyle = cellStyle;
-                cell.SetCellValue(count);count++;
+                cell.SetCellValue(count); count++;
 
-                if(i+j-1!=i)
+                if (i + j - 1 != i)
                 {
-                    rowTemplate = sheet1.GetRow(i+j-1);
+                    rowTemplate = sheet1.GetRow(i + j - 1);
                     cell = rowTemplate.CreateCell(0);
                     cell.CellStyle = cellStyle;
                 }
@@ -422,6 +430,52 @@ namespace Competition.Controllers
             return File(ms, "application/vnd.ms-excel", title + ".xls");
         }
 
+        /// <summary>
+        /// 交换用户权限
+        /// </summary>
+        /// <param name="ID">被交换的用户</param>
+        /// <returns></returns>
+        /// User.Identity.Name为交换的用户
+        [Authorize]
+        [HttpPost]
+        public ActionResult GivePermission(string ID)
+        {
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            
+            student s1 = msgBal.GetStudentByID(User.Identity.Name);
+            student s2 = msgBal.GetStudentByID(ID);
+            sbyte? t = s1.HasPermission;s1.HasPermission = s2.HasPermission;s2.HasPermission = t;
+
+            msgBal.RefreshStudent(s1);
+            msgBal.RefreshStudent(s2);
+            return RedirectToAction("Index","Home");
+        }
+
+        /// <summary>
+        /// 修改用户密码界面
+        /// </summary>
+        /// <param name="ID">用户的学号</param>
+        /// <returns></returns>
+        [Authorize]
+        public ActionResult ModifyPwd(string ID)
+        {
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            return View(msgBal.GetStudentByID(ID));
+        }
+
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        public ActionResult ModifyPwd(student s)
+        {
+            MsgBusinessLayer msgBal = new MsgBusinessLayer();
+            return msgBal.ModifyStudentPassword(s) ? View("~/Views/Home/UserSettings.cshtml", msgBal.GetStudentByID(s.StudentID)) :
+                 View("~/Views/Shared/Error.cshtml", new ErrorMessage { ErrorMsg = "输入的原密码错误！", Url = "/Manage/ModifyPwd?ID="+s.StudentID });
+        }
     }
 
 
@@ -435,7 +489,6 @@ namespace Competition.Controllers
         /// 成员学号
         /// </summary>
         public string[] member { get; set; }
-        public string ErrorMsg { get; set; }
     }
 
     public class TemplateCompetition
@@ -445,6 +498,7 @@ namespace Competition.Controllers
         public string Details { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public DateTime DeleteTime { get; set; }
         public int TeamLimit { get; set; }
         /// <summary>
         /// 复选框中参赛组别

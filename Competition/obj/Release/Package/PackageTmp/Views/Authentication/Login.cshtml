@@ -1,26 +1,19 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = "登录";
 }
 
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome!</title>
-    <!--<link rel="stylesheet" type="test/css" href="Welcome.css" />-->
-</head>
-<body>
-    @Html.ValidationMessage("CredentialError", new { Style = "color:red;" })
-    <form action="/Authentication/Login" method="post" class="form-horizontal" align="center">
-        <div class="form-group"  align="center">
-            <input type="text" class="form-control" name="StudentID" required title="Username required" placeholder="学号">
-        </div>
-        <div class="form-group"  align="center">
-            <input type="password" class="form-control" name="Password" required title="Password required" placeholder="密码"><br />
-        </div>
-        <button class="btn btn-info" style="width:130px;">登录</button>
-        <a href="/Authentication/Register" class="btn btn-warning" style="width:130px;">注册</a>
-        <!--<div class="col"><a href="/Authentication/Retrieve" title="Retrieve Password">忘记密码?</a></div>-->
-    </form>
-</body>
+@if (!ViewContext.ViewData.ModelState.IsValid)
+{
+    @Html.ValidationMessage("CredentialError", new { Class = "alert alert-danger" }, "div")
+}
+<form action="/Authentication/Login" method="post" align="center" class="login-form">
+    <div class="form-group" align="center">
+        <input type="text" class="form-control" name="StudentID" required title="Username required" placeholder="学号">
+    </div>
+    <div class="form-group" align="center">
+        <input type="password" class="form-control" name="Password" required title="Password required" placeholder="密码">
+    </div>
+    <button class="btn btn-info" style="width:130px;">登录</button>
+    <a href="/Authentication/Register" class="btn btn-warning" style="width:130px;">注册</a>
+</form>

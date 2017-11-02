@@ -1,49 +1,27 @@
 ﻿@using Competition.ViewModels
-
 @{
     string title = ViewBag.Title + " | 比赛报名系统";
-    string imagesource = "/background/"+User.Identity.Name+".jpg";
-}
-
-<!DOCTYPE html>
+    //string newFilePath = @"F:\Program\Competition\Competition\background\";//save path
+    string newFilePath = @"C:\web\Competition\background\";//save to cloud
+    string imagesource = Directory.EnumerateFiles(newFilePath, $"{User.Identity.Name}.*").FirstOrDefault();
+    if (imagesource != null)
+    {
+        imagesource = "\"/" + imagesource.Substring(Server.MapPath("/").Length).Replace("\\", "/") + "\"";
+    }
+}<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    
-
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <title>@title</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
-    <style>
-        body {
-            /*background-image: url(/background/16061313.jpg);*/
-            background-attachment: fixed;
-            background-size:100% 100%;
-        }
-
-        .page {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #000000;
-            border-radius: 4px;
-        }
-
-        .table {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #000000;
-        }
-
-        .table-bordered {
-            border-collapse:separate;
-            border-radius: 4px;
-        }
-    </style>
 </head>
 <body style="background-image:url(@imagesource);">
     <script>
@@ -52,7 +30,7 @@
         }
     </script>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container" style="width:90%;">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -63,19 +41,17 @@
                     MsgBusinessLayer msgBal = new MsgBusinessLayer();
                     string userName = msgBal.GetUserNameByID(User.Identity.Name);
                 }
-                @Html.ActionLink("Welcome!", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("自动化学院比赛报名系统", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("比赛", "Index", "Home")</li>
                     <li><a href="/Home/ShowUsers">用户</a></li>
-                    <!--显示名称      方法名     控制器名-->
                 </ul>
                 <form class="navbar-form navbar-left" role="search" action="/Home/SearchUser" method="get">
                     <div class="form-group">
                         <input type="text" class="form-control" name="keyword" placeholder="搜索用户">
                     </div>
-                    <!--<button type="submit" class="btn btn-default">提交</button>-->
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.Name != "")
@@ -98,35 +74,31 @@
                                 登录<b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="col-md-12 container">
+                                <li class="col-md-12">
                                     <form action="/Authentication/SubLogin" method="post" class="form-horizontal" role="form">
                                         <br />
                                         <div class="form-group">
-                                            <div class="col-md-12"><input type="text" class="form-control" name="StudentID" required title="Username required" placeholder="学号" /></div>
+                                            <input type="text" class="form-control" name="StudentID" required title="Username required" placeholder="学号" />
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12"><input type="password" class="form-control" name="Password" required title="Password required" placeholder="密码" /></div>
+                                            <input type="password" class="form-control" name="Password" required title="Password required" placeholder="密码" />
                                         </div>
-                                        <div><button class="btn btn-primary btn-sm">登录</button></div>
+                                        <div>
+                                            <button class="btn btn-primary btn-block">登录</button>
+                                            <button class="btn btn-default btn-block" type="button" onclick="location.href='/Authentication/Register'">注册</button>
+                                        </div>
                                     </form>
                                     <br />
                                 </li>
-                                <li><a href="/Authentication/Register" title="Register"><span class="glyphicon glyphicon-log-in"></span>  注册</a></li>
                             </ul>
                         </li>
-                        <!--
-                        <li>@Html.ActionLink("登录", "Login", "Authentication")</li>
-                        -->
                     }
                 </ul>
             </div>
         </div>
     </div>
-    <br />
-    <div class="container" style="width:80%;font-size:large;">
+    <div class="container main">
         @RenderBody()
-        <!--<hr />-->
-        <br />
     </div>
     <div class="modal-footer" style="color:darkgray;">
         <p>Created By <a href="mailto:2464676281@qq.com">Ctrlkismet</a>.  Powered By <a href="http://getbootstrap.com/2.3.2/" target="_blank">Bootstrap</a>.</p>

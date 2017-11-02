@@ -1,16 +1,10 @@
-﻿@model string
+﻿@model ErrorMessage
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = "错误";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <p2>@Model</p2>
-</body>
-</html>
+<div class="page">
+    <h2>@Model.ErrorMsg</h2>
+    <a href=@Model.Url>回到前一界面</a>
+</div>
